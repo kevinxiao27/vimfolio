@@ -1,0 +1,637 @@
+// ═══════════════════════════════════════════════════════
+//  VIM-FOLIO — Kevin Xiao's Portfolio
+// ═══════════════════════════════════════════════════════
+
+const FILES = [
+  { name: 'home.md', type: 'file' },
+  { name: 'experience.md', type: 'file' },
+  { name: 'projects.md', type: 'file' },
+];
+
+const EXPERIENCE = [
+  {
+    role: 'Software Engineering Intern',
+    org: 'Tesla',
+    link: 'https://www.tesla.com/',
+    date: 'Incoming May 2026',
+    desc: 'Fleetnet and Robotaxi. Working on distributed systems',
+  },
+  {
+    role: 'Lead Software Engineer',
+    org: 'UBC BizTech',
+    link: 'https://www.ubcbiztech.com/',
+    date: 'May 2024 – Present',
+    desc: 'Enabled 4,070+ connections for 270 attendees at flagship conference with NFC cards and an internal networking platform using serverless architecture and DynamoDB. Engaged 200+ concurrent audience and judges with real-time reactions and scoring (< 100 ms response time) using a WebSocket microservice and AWS API Gateway. Automated feedback distribution for 150+ hackathon attendees and judges using z-score normalization and a NFC workflow.',
+  },
+  {
+    role: 'Software Engineer Intern — Backend Decision Team',
+    org: 'DataVisor',
+    link: 'https://www.datavisor.com/',
+    date: 'Jan 2025 – Apr 2025',
+    desc: 'Led a business intelligence enhancement project used by 5+ clients with 1M+ users, securing dashboard embeddings by parsing tree-structured Metabase data and custom client configurations. Resolved recurring P1 issue requiring 100+ hours across 10+ infra team members by synchronizing ClickHouse table configs with post-deployment jobs across 12 environments. Eliminated 100% of manual time spent by 300+ fraud investigators templating fraud case notes by building a templating service with Liquibase-based rollback support.',
+  },
+  {
+    role: 'Undergraduate Teaching Assistant — Software Construction | OOP',
+    org: 'University of British Columbia',
+    link: 'https://www.cs.ubc.ca/course-section/cpsc-210-101-2023w',
+    date: 'Sept 2024 – Present',
+    desc: 'Mentored over 50 students through personal office hours, guiding them through library documentation and providing design pattern advice for personal projects. Explained object-oriented programming and design concepts to over 500 students on the class discussion board, encouraging in-depth exploration of topics such as robustness and iterator implementation.',
+  },
+  {
+    role: 'Frontend Development Intern',
+    org: 'NAOS Blockchain Capital',
+    link: 'https://www.naos.xyz/',
+    date: 'Jan 2024 – Jul 2024',
+    desc: "Increased social media impressions by 180% by integrating TikTok's oEmbed API into the company's static site, revamping the media carousel to include posts from multiple social platforms. Reduced manual customer information aggregation time by 90% by developing internal tools using Puppeteer to web scrape, parse, and export over 2 GB of data to Excel for cross-functional use.",
+  },
+];
+
+const PROJECTS = [
+  {
+    name: 'Nerve — Real-Time Emergency Dispatch Dashboard',
+    date: 'March 2025',
+    desc: 'ProductX Hackathon (2nd Place & CDL/Venture Founder Prize). Won $500 prize out of 60+ teams, plus CDL & Venture Founder awards. Built a real-time dashboard to stream body-cam video/audio from field units with AI-powered event summarization and sentiment detection using TensorFlow. Led architecture and data ingestion using Socket.io, Express.js, Supabase, and AssemblyAI — batching videos for ingestion and streaming updates over WebSockets.',
+    link: 'https://devpost.com/software/nerve-1vlr0m',
+  },
+  {
+    name: 'UXOpen Live Voting Platform',
+    date: 'May 2024',
+    desc: 'Architected and led development of core WebSocket microservice for an end-to-end live voting platform, supporting 100+ concurrent users; documented system design and database schemas for seamless handoff. Reduced DynamoDB read costs by 40% by transitioning from relational scans to a single-table query schema with Global Secondary Indexes.',
+    link: 'https://github.com/ubc-biztech/serverless-biztechapp',
+  },
+  {
+    name: 'GeoPlots',
+    date: 'July 2024',
+    desc: "Developed a geo-data focused journaling web app with rapid data visualization, utilizing Leaflet and Next.js for optimized data fetching. Enhanced identity and authorization with Firebase SDK for route-guarding and secured API calls. Decreased location input time by 70% using MapTiler's reverse geocoding API, mapping coordinates to addresses quickly.",
+    link: 'https://github.com/kevinxiao27/geoplot',
+    prod: 'https://geoplot-journal.vercel.app/',
+  },
+  {
+    name: 'SwiftGift — ProduHacks',
+    date: 'March 2024',
+    desc: "Delivered personalized gift recommendations by structuring OpenAI's GPT-3.5 output based on user preferences. Refined code coupling by 40% through implementing a custom middleware to sanitize and validate user inputs. Diminished database read and write times by 30% by integrating MongoDB indexing to avoid large table scans and inefficient queries.",
+    link: 'https://github.com/kevinxiao27/swiftgift',
+  },
+  {
+    name: 'CacheYouLater — nwHacks 2024',
+    date: 'January 2024',
+    desc: 'nwHacks submission for community and connection based on real life and virtual geocaching integration. Utilizing a noSQL database through a RESTFUL API with user authentication and JWT Token, I seamlessly integrated the backend and frontend using Next.js.',
+    link: 'https://github.com/kevinxiao27/movie-ticket-booking',
+  },
+];
+
+const BG_LINES = [
+  '$ git log --oneline -20',
+  'a3f2d1e feat: add websocket microservice',
+  'b7c4e9a fix: dynamodb single-table query optimization',
+  'd1f8b2c chore: update tailwind config',
+  'e5a9c3d feat: implement NFC workflow',
+  'f2b6d8e refactor: extract middleware layer',
+  '$ npm run build',
+  '> portfolio@0.1.0 build',
+  '> next build',
+  '✓ Compiled successfully',
+  'Route (app)              Size     First Load',
+  '┌ /                      4.2 kB   87.3 kB',
+  '├ /experience            2.1 kB   85.2 kB',
+  '└ /projects              3.8 kB   86.9 kB',
+  '$ cat src/components/Hero.tsx',
+  'const vertexShader = `',
+  '  uniform float uTime;',
+  '  varying float vElevation;',
+  '  void main() {',
+  '    vec3 pos = position;',
+  '    pos.z += cnoise(pos) * uNoiseAmp;',
+  '    gl_Position = projectionMatrix',
+  '      * modelViewMatrix * vec4(pos, 1.0);',
+  '  }',
+  '`;',
+  '$ docker ps',
+  'CONTAINER   IMAGE          STATUS',
+  'a1b2c3d4    postgres:16    Up 3 hours',
+  '$ psql -U admin -d portfolio',
+  'portfolio=# SELECT COUNT(*) FROM projects;',
+  ' count',
+  '-------',
+  '     5',
+  '$ tsc --noEmit',
+  'Found 0 errors.',
+  '$ tree src/',
+  'src/',
+  '├── app/',
+  '│   ├── experience/',
+  '│   └── projects/',
+  '├── components/',
+  '│   └── types.ts',
+  '└── assets/',
+  '$ nvm current',
+  'v20.11.1',
+  '$ git diff --stat',
+  ' 2 files changed, 8 insertions(+), 8 deletions(-)',
+  '$ bun install',
+  '  421 packages installed [2.34s]',
+  '$',
+];
+
+// ── State ────────────────────────────────────────────
+
+const Mode = { IDLE: 'IDLE', FILE_TREE: 'FILE_TREE', FILE_CONTENT: 'FILE_CONTENT', SEARCH: 'SEARCH' };
+
+const state = {
+  mode: Mode.IDLE,
+  overlayOpen: false,
+  cursor: 0,
+  contentCursor: 0,
+  openFile: null,
+  searchQuery: '',
+  countStr: '',
+  pendingG: false,
+};
+
+// ── DOM ──────────────────────────────────────────────
+
+const $content = document.getElementById('content');
+const $modeIndicator = document.getElementById('mode-indicator');
+const $currentPath = document.getElementById('current-path');
+const $cursorPos = document.getElementById('cursor-pos');
+const $titlePath = document.getElementById('title-path');
+const $searchBar = document.getElementById('search-bar');
+const $searchInput = document.getElementById('search-input');
+const $bgContent = document.getElementById('bg-content');
+const $countDisplay = document.getElementById('count-display');
+const $closeBtn = document.getElementById('btn-close');
+
+$closeBtn.addEventListener('click', () => {
+  if (state.mode === Mode.FILE_CONTENT) {
+    closeFile();
+  } else if (state.mode === Mode.SEARCH) {
+    closeSearch();
+    closeOverlay();
+  } else if (state.overlayOpen) {
+    closeOverlay();
+  }
+});
+
+// ── Background ───────────────────────────────────────
+
+function initBackground() {
+  const doubled = [...BG_LINES, '', ...BG_LINES].join('\n');
+  $bgContent.textContent = doubled;
+}
+
+// ── Helpers ──────────────────────────────────────────
+
+function escapeHtml(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function extractDomain(url) {
+  try { return new URL(url).hostname + new URL(url).pathname.replace(/\/$/, ''); }
+  catch { return url; }
+}
+
+function getVisibleFiles() {
+  if (state.searchQuery) return FILES.filter(f => f.name.toLowerCase().includes(state.searchQuery.toLowerCase()));
+  return FILES;
+}
+
+function clampCursor() {
+  const n = getVisibleFiles().length;
+  if (state.cursor < 0) state.cursor = 0;
+  if (state.cursor >= n) state.cursor = n - 1;
+}
+
+function getCount() {
+  const n = parseInt(state.countStr) || 1;
+  state.countStr = '';
+  return n;
+}
+
+function wrapText(text, width) {
+  const words = text.split(' ');
+  const lines = [];
+  let line = '';
+  words.forEach(word => {
+    if (line.length + word.length + 1 > width) {
+      lines.push(line);
+      line = word;
+    } else {
+      line = line ? line + ' ' + word : word;
+    }
+  });
+  if (line) lines.push(line);
+  return lines;
+}
+
+// ── Content Lines ────────────────────────────────────
+
+function buildHomeLines() {
+  return [
+    { html: '<span class="heading">Kevin Xiao</span>' },
+    { html: '<span class="subheading">CS + Business @ UBC · SWE @ UBC BizTech</span>' },
+    { html: '' },
+    { html: '<span class="divider-line">────────────────────────────────────────</span>' },
+    { html: '' },
+    { html: '<span class="prompt">&gt;</span> <a class="link" href="https://github.com/kevinxiao27" target="_blank" rel="noopener">github.com/kevinxiao27</a>' },
+    { html: '<span class="prompt">&gt;</span> <a class="link" href="https://www.linkedin.com/in/kevinxiaoxyz/" target="_blank" rel="noopener">linkedin.com/in/kevinxiaoxyz</a>' },
+    { html: '' },
+    { html: '<span class="divider-line">────────────────────────────────────────</span>' },
+    { html: '' },
+    { html: '<span style="color: var(--fg-dim);">  SWE  ·  STUDENT  ·  TA  ·  SOFTWARE LEAD</span>' },
+  ];
+}
+
+function buildExperienceLines() {
+  const lines = [];
+  EXPERIENCE.forEach((exp, i) => {
+    if (i > 0) {
+      lines.push({ html: '' });
+      lines.push({ html: '<span class="divider-line">────────────────────────────────────────</span>' });
+      lines.push({ html: '' });
+    }
+    lines.push({ html: `<span class="heading">${escapeHtml(exp.role)}</span>` });
+    lines.push({ html: `<span class="subheading"><a class="link" href="${exp.link}" target="_blank" rel="noopener">${escapeHtml(exp.org)}</a> · ${escapeHtml(exp.date)}</span>` });
+    lines.push({ html: '' });
+    wrapText(exp.desc, 76).forEach(l => lines.push({ html: escapeHtml(l) }));
+  });
+  return lines;
+}
+
+function buildProjectLines() {
+  const lines = [];
+  PROJECTS.forEach((proj, i) => {
+    if (i > 0) {
+      lines.push({ html: '' });
+      lines.push({ html: '<span class="divider-line">────────────────────────────────────────</span>' });
+      lines.push({ html: '' });
+    }
+    lines.push({ html: `<span class="heading">${escapeHtml(proj.name)}</span>` });
+    lines.push({ html: `<span class="subheading">${escapeHtml(proj.date)}</span>` });
+    lines.push({ html: '' });
+    wrapText(proj.desc, 76).forEach(l => lines.push({ html: escapeHtml(l) }));
+    lines.push({ html: '' });
+    lines.push({ html: `<span class="prompt">&gt;</span> <a class="link" href="${proj.link}" target="_blank" rel="noopener">${extractDomain(proj.link)}</a>` });
+    if (proj.prod) {
+      lines.push({ html: `<span class="prompt">&gt;</span> <a class="link" href="${proj.prod}" target="_blank" rel="noopener">${extractDomain(proj.prod)}</a>` });
+    }
+  });
+  return lines;
+}
+
+// ── Render ───────────────────────────────────────────
+
+function render() {
+  switch (state.mode) {
+    case Mode.IDLE: renderSplash(); break;
+    case Mode.FILE_TREE: renderFileTree(); break;
+    case Mode.FILE_CONTENT: renderFileContent(); break;
+    case Mode.SEARCH: renderFileTree(); break;
+  }
+  updateStatusBar();
+}
+
+function updateStatusBar() {
+  $modeIndicator.textContent = state.mode === Mode.SEARCH ? 'SEARCH' : 'NORMAL';
+  $modeIndicator.className = state.mode === Mode.SEARCH ? 'search-mode' : '';
+
+  const path = state.mode === Mode.FILE_CONTENT ? `~/portfolio/${state.openFile}` : '~/portfolio';
+  $currentPath.textContent = path;
+  $titlePath.textContent = path;
+
+  if (state.mode === Mode.FILE_TREE || state.mode === Mode.SEARCH) {
+    $cursorPos.textContent = `${state.cursor + 1}/${getVisibleFiles().length}`;
+  } else if (state.mode === Mode.FILE_CONTENT) {
+    $cursorPos.innerHTML = '<span class="readonly-badge">[readonly]</span>';
+  } else {
+    $cursorPos.textContent = '';
+  }
+
+  $countDisplay.textContent = state.countStr;
+}
+
+function renderSplash() {
+  $content.innerHTML = `
+    <div class="splash">
+      <div class="name">Kevin Xiao</div>
+      <div class="bio">CS + Business @ UBC</div>
+      <div class="bio">Incoming @ Tesla</div>
+      <div class="links">
+        <a href="https://github.com/kevinxiao27" target="_blank" rel="noopener">github.com/kevinxiao27</a>
+        <a href="https://www.linkedin.com/in/kevinxiaoxyz/" target="_blank" rel="noopener">linkedin.com/in/kevinxiaoxyz</a>
+      </div>
+      <div class="hint">press <kbd>-</kbd> to explore. Oil.nvim >> </div>
+    </div>
+  `;
+}
+
+function renderFileTree() {
+  const files = getVisibleFiles();
+  if (files.length === 0) {
+    $content.innerHTML = '<div class="no-results">no matches found</div>';
+    return;
+  }
+  if (state.cursor >= files.length) state.cursor = files.length - 1;
+
+  let html = '<div class="file-tree">';
+  files.forEach((file, i) => {
+    const isCursor = i === state.cursor;
+    const dist = Math.abs(i - state.cursor);
+    const lineNum = isCursor ? (i + 1) : dist;
+    const [base, ...rest] = file.name.split('.');
+    const ext = rest.length ? '.' + rest.join('.') : '';
+    html += `
+      <div class="file-line${isCursor ? ' cursor' : ''}" data-index="${i}">
+        <span class="line-number">${lineNum}</span>
+        <span class="file-icon">📄</span>
+        <span class="file-name">${base}<span class="ext">${ext}</span></span>
+      </div>
+    `;
+  });
+  html += '</div>';
+  $content.innerHTML = html;
+}
+
+function renderFileContent() {
+  let lines;
+  switch (state.openFile) {
+    case 'home.md': lines = buildHomeLines(); break;
+    case 'experience.md': lines = buildExperienceLines(); break;
+    case 'projects.md': lines = buildProjectLines(); break;
+    default:
+      $content.innerHTML = '<div class="no-results">file not found</div>';
+      return;
+  }
+
+  if (lines.length === 0) return;
+  if (state.contentCursor >= lines.length) state.contentCursor = lines.length - 1;
+
+  let html = '<div class="content-lines">';
+  lines.forEach((line, i) => {
+    const isCursor = i === state.contentCursor;
+    const dist = Math.abs(i - state.contentCursor);
+    const lineNum = isCursor ? (i + 1) : dist;
+    html += `
+      <div class="content-line${isCursor ? ' cursor' : ''}">
+        <span class="line-number">${lineNum}</span>
+        <span class="line-text">${line.html}</span>
+      </div>
+    `;
+  });
+  html += '</div>';
+  $content.innerHTML = html;
+
+  // auto-scroll to keep cursor visible
+  const cursorEl = $content.querySelector('.content-line.cursor');
+  if (cursorEl) {
+    const containerRect = $content.getBoundingClientRect();
+    const cursorRect = cursorEl.getBoundingClientRect();
+    if (cursorRect.top < containerRect.top + 64) {
+      cursorEl.scrollIntoView({ block: 'start', behavior: 'instant' });
+    } else if (cursorRect.bottom > containerRect.bottom - 32) {
+      cursorEl.scrollIntoView({ block: 'end', behavior: 'instant' });
+    }
+  }
+}
+
+// ── Search ───────────────────────────────────────────
+
+function openSearch() {
+  state.mode = Mode.SEARCH;
+  state.searchQuery = '';
+  state.countStr = '';
+  $searchBar.classList.remove('hidden');
+  $searchInput.value = '';
+  $searchInput.focus();
+  render();
+}
+
+function closeSearch() {
+  state.mode = Mode.FILE_TREE;
+  state.searchQuery = '';
+  $searchBar.classList.add('hidden');
+  $searchInput.blur();
+  clampCursor();
+  render();
+}
+
+$searchInput.addEventListener('input', e => {
+  state.searchQuery = e.target.value;
+  state.cursor = 0;
+  render();
+});
+
+$searchInput.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { e.preventDefault(); closeSearch(); return; }
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    const files = getVisibleFiles();
+    if (files.length > 0) { closeSearch(); openFile(state.cursor); }
+    return;
+  }
+  if (e.key === 'ArrowDown') { e.preventDefault(); state.cursor++; clampCursor(); render(); return; }
+  if (e.key === 'ArrowUp') { e.preventDefault(); state.cursor--; clampCursor(); render(); return; }
+});
+
+// ── Overlay ──────────────────────────────────────────
+
+function openOverlay() {
+  state.overlayOpen = true;
+  state.mode = Mode.FILE_TREE;
+  state.cursor = 0;
+  state.countStr = '';
+  state.pendingG = false;
+  render();
+}
+
+function closeOverlay() {
+  state.overlayOpen = false;
+  state.mode = Mode.IDLE;
+  state.openFile = null;
+  state.searchQuery = '';
+  state.countStr = '';
+  state.pendingG = false;
+  $searchBar.classList.add('hidden');
+  render();
+}
+
+function openFile(index) {
+  const files = getVisibleFiles();
+  if (index < 0 || index >= files.length) return;
+  state.mode = Mode.FILE_CONTENT;
+  state.openFile = files[index].name;
+  state.contentCursor = 0;
+  state.countStr = '';
+  render();
+}
+
+function closeFile() {
+  state.mode = Mode.FILE_TREE;
+  state.openFile = null;
+  state.contentCursor = 0;
+  render();
+}
+
+// ── Keybinds ─────────────────────────────────────────
+
+let gTimeout = null;
+
+document.addEventListener('keydown', e => {
+  if (document.activeElement === $searchInput) return;
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  const key = e.key;
+
+  // global: toggle overlay / back
+  if (key === '-') {
+    e.preventDefault();
+    if (state.mode === Mode.FILE_CONTENT) {
+      closeFile();
+    } else if (state.overlayOpen) {
+      closeOverlay();
+    } else {
+      openOverlay();
+    }
+    return;
+  }
+
+  if (state.mode === Mode.IDLE) return;
+
+  // ── FILE_TREE ──────────────────────────────────────
+  if (state.mode === Mode.FILE_TREE) {
+    e.preventDefault();
+
+    if (/^[0-9]$/.test(key)) {
+      if (state.countStr === '' && key === '0') return;
+      state.countStr += key;
+      updateStatusBar();
+      return;
+    }
+
+    if (state.pendingG) {
+      state.pendingG = false;
+      clearTimeout(gTimeout);
+      if (key === 'g') {
+        const count = getCount();
+        state.cursor = count > 1 ? Math.min(count - 1, getVisibleFiles().length - 1) : 0;
+        render();
+        return;
+      }
+    }
+
+    switch (key) {
+      case 'j': case 'ArrowDown': {
+        const n = getCount();
+        state.cursor = Math.min(state.cursor + n, getVisibleFiles().length - 1);
+        render();
+        break;
+      }
+      case 'k': case 'ArrowUp': {
+        const n = getCount();
+        state.cursor = Math.max(state.cursor - n, 0);
+        render();
+        break;
+      }
+      case 'l': case 'Enter': case 'ArrowRight':
+        getCount();
+        openFile(state.cursor);
+        break;
+      case 'h': case 'Escape': case 'ArrowLeft':
+        getCount();
+        closeOverlay();
+        break;
+      case 'G': {
+        const n = getCount();
+        state.cursor = n > 1
+          ? Math.min(n - 1, getVisibleFiles().length - 1)
+          : getVisibleFiles().length - 1;
+        render();
+        break;
+      }
+      case 'g':
+        state.pendingG = true;
+        gTimeout = setTimeout(() => { state.pendingG = false; }, 500);
+        break;
+      case '/':
+        getCount();
+        openSearch();
+        break;
+      default:
+        getCount();
+        break;
+    }
+    return;
+  }
+
+  // ── FILE_CONTENT ───────────────────────────────────
+  if (state.mode === Mode.FILE_CONTENT) {
+    e.preventDefault();
+
+    if (/^[0-9]$/.test(key)) {
+      if (state.countStr === '' && key === '0') return;
+      state.countStr += key;
+      updateStatusBar();
+      return;
+    }
+
+    const totalLines = $content.querySelectorAll('.content-line').length;
+
+    if (state.pendingG) {
+      state.pendingG = false;
+      clearTimeout(gTimeout);
+      if (key === 'g') {
+        const count = getCount();
+        state.contentCursor = count > 1 ? Math.min(count - 1, totalLines - 1) : 0;
+        render();
+        return;
+      }
+    }
+
+    switch (key) {
+      case 'j': case 'ArrowDown': {
+        const n = getCount();
+        state.contentCursor = Math.min(state.contentCursor + n, totalLines - 1);
+        render();
+        break;
+      }
+      case 'k': case 'ArrowUp': {
+        const n = getCount();
+        state.contentCursor = Math.max(state.contentCursor - n, 0);
+        render();
+        break;
+      }
+      case 'h': case 'Escape': case 'ArrowLeft':
+        getCount();
+        closeFile();
+        break;
+      case 'g':
+        state.pendingG = true;
+        gTimeout = setTimeout(() => { state.pendingG = false; }, 500);
+        break;
+      case 'G': {
+        const n = getCount();
+        state.contentCursor = n > 1
+          ? Math.min(n - 1, totalLines - 1)
+          : totalLines - 1;
+        render();
+        break;
+      }
+      case 'l': case 'ArrowRight': {
+        // follow link under cursor
+        const cursorEl = $content.querySelector('.content-line.cursor');
+        if (cursorEl) {
+          const link = cursorEl.querySelector('a.link');
+          if (link) window.open(link.href, '_blank', 'noopener');
+        }
+        getCount();
+        break;
+      }
+      default:
+        getCount();
+        break;
+    }
+    return;
+  }
+});
+
+// ── Init ─────────────────────────────────────────────
+initBackground();
+render();
