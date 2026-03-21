@@ -1,7 +1,3 @@
-// ═══════════════════════════════════════════════════════
-//  VIM-FOLIO — Kevin Xiao's Portfolio
-// ═══════════════════════════════════════════════════════
-
 const FILES = [
   { name: 'home.md', type: 'file' },
   { name: 'experience.md', type: 'file' },
@@ -154,23 +150,11 @@ const $content = document.getElementById('content');
 const $modeIndicator = document.getElementById('mode-indicator');
 const $currentPath = document.getElementById('current-path');
 const $cursorPos = document.getElementById('cursor-pos');
-const $titlePath = document.getElementById('title-path');
 const $searchBar = document.getElementById('search-bar');
 const $searchInput = document.getElementById('search-input');
 const $bgContent = document.getElementById('bg-content');
 const $countDisplay = document.getElementById('count-display');
-const $closeBtn = document.getElementById('btn-close');
 
-$closeBtn.addEventListener('click', () => {
-  if (state.mode === Mode.FILE_CONTENT) {
-    closeFile();
-  } else if (state.mode === Mode.SEARCH) {
-    closeSearch();
-    closeOverlay();
-  } else if (state.overlayOpen) {
-    closeOverlay();
-  }
-});
 
 // ── Background ───────────────────────────────────────
 
@@ -228,7 +212,7 @@ function wrapText(text, width) {
 function buildHomeLines() {
   return [
     { html: '<span class="heading">Kevin Xiao</span>' },
-    { html: '<span class="subheading">CS + Business @ UBC · SWE @ UBC BizTech</span>' },
+    { html: '<span class="subheading">CS + Business @ UBC · Incoming @ Tesla</span>' },
     { html: '' },
     { html: '<span class="divider-line">────────────────────────────────────────</span>' },
     { html: '' },
@@ -237,7 +221,6 @@ function buildHomeLines() {
     { html: '' },
     { html: '<span class="divider-line">────────────────────────────────────────</span>' },
     { html: '' },
-    { html: '<span style="color: var(--fg-dim);">  SWE  ·  STUDENT  ·  TA  ·  SOFTWARE LEAD</span>' },
   ];
 }
 
@@ -296,7 +279,6 @@ function updateStatusBar() {
 
   const path = state.mode === Mode.FILE_CONTENT ? `~/portfolio/${state.openFile}` : '~/portfolio';
   $currentPath.textContent = path;
-  $titlePath.textContent = path;
 
   if (state.mode === Mode.FILE_TREE || state.mode === Mode.SEARCH) {
     $cursorPos.textContent = `${state.cursor + 1}/${getVisibleFiles().length}`;
