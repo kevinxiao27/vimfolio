@@ -82,59 +82,6 @@ const PROJECTS = [
     },
 ];
 
-const BG_LINES = [
-    '$ git log --oneline -20',
-    'a3f2d1e feat: add websocket microservice',
-    'b7c4e9a fix: dynamodb single-table query optimization',
-    'd1f8b2c chore: update tailwind config',
-    'e5a9c3d feat: implement NFC workflow',
-    'f2b6d8e refactor: extract middleware layer',
-    '$ npm run build',
-    '> portfolio@0.1.0 build',
-    '> next build',
-    '✓ Compiled successfully',
-    'Route (app)              Size     First Load',
-    '┌ /                      4.2 kB   87.3 kB',
-    '├ /experience            2.1 kB   85.2 kB',
-    '└ /projects              3.8 kB   86.9 kB',
-    '$ cat src/components/Hero.tsx',
-    'const vertexShader = `',
-    '  uniform float uTime;',
-    '  varying float vElevation;',
-    '  void main() {',
-    '    vec3 pos = position;',
-    '    pos.z += cnoise(pos) * uNoiseAmp;',
-    '    gl_Position = projectionMatrix',
-    '      * modelViewMatrix * vec4(pos, 1.0);',
-    '  }',
-    '`;',
-    '$ docker ps',
-    'CONTAINER   IMAGE          STATUS',
-    'a1b2c3d4    postgres:16    Up 3 hours',
-    '$ psql -U admin -d portfolio',
-    'portfolio=# SELECT COUNT(*) FROM projects;',
-    ' count',
-    '-------',
-    '     5',
-    '$ tsc --noEmit',
-    'Found 0 errors.',
-    '$ tree src/',
-    'src/',
-    '├── app/',
-    '│   ├── experience/',
-    '│   └── projects/',
-    '├── components/',
-    '│   └── types.ts',
-    '└── assets/',
-    '$ nvm current',
-    'v20.11.1',
-    '$ git diff --stat',
-    ' 2 files changed, 8 insertions(+), 8 deletions(-)',
-    '$ bun install',
-    '  421 packages installed [2.34s]',
-    '$',
-];
-
 // ── State ────────────────────────────────────────────
 
 const Mode = { IDLE: 'IDLE', FILE_TREE: 'FILE_TREE', FILE_CONTENT: 'FILE_CONTENT', SEARCH: 'SEARCH' };
@@ -148,7 +95,6 @@ const state = {
     searchQuery: '',
     countStr: '',
     pendingG: false,
-    openedFromIdle: false,
 };
 
 // ── DOM ──────────────────────────────────────────────
@@ -159,7 +105,6 @@ const $currentPath = document.getElementById('current-path');
 const $cursorPos = document.getElementById('cursor-pos');
 const $searchBar = document.getElementById('search-bar');
 const $searchInput = document.getElementById('search-input');
-const $bgContent = document.getElementById('bg-content');
 const $countDisplay = document.getElementById('count-display');
 
 
@@ -222,11 +167,6 @@ window.addEventListener('popstate', handleHash);
 
 // ── Background ───────────────────────────────────────
 
-function initBackground() {
-    const doubled = [...BG_LINES, '', ...BG_LINES].join('\n');
-    $bgContent.textContent = doubled;
-}
-
 // ── Helpers ──────────────────────────────────────────
 
 function escapeHtml(s) {
@@ -282,6 +222,7 @@ function buildHomeLines() {
         { html: '' },
         { html: '<span class="prompt">&gt;</span> <a class="link" href="https://github.com/kevinxiao27" target="_blank" rel="noopener">github.com/kevinxiao27</a>' },
         { html: '<span class="prompt">&gt;</span> <a class="link" href="https://www.linkedin.com/in/kevinxiaoxyz/" target="_blank" rel="noopener">linkedin.com/in/kevinxiaoxyz</a>' },
+        { html: '<span class="prompt">&gt;</span> <a class="link" href="mailto:kevin.xiao27@gmail.com" target="_blank" rel="noopener">kevin.xiao27@gmail.com</a>' },
         { html: '' },
         { html: '<span class="divider-line">────────────────────────────────────────</span>' },
         { html: '' },
@@ -364,8 +305,9 @@ function renderSplash() {
       <div class="links">
         <a href="https://github.com/kevinxiao27" target="_blank" rel="noopener">github.com/kevinxiao27</a>
         <a href="https://www.linkedin.com/in/kevinxiaoxyz/" target="_blank" rel="noopener">linkedin.com/in/kevinxiaoxyz</a>
+        <a href="mailto:kevin.xiao27@gmail.com" target="_blank" rel="noopener">kevin.xiao27@gmail.com</a>
       </div>
-      <div class="hint" id="splash-hint">press <kbd>-</kbd> to explore. Oil.nvim >> </div>
+      <div class="hint" id="splash-hint">press <kbd>-</kbd> to explore. Inspired by nvim. </div>
     </div>
   `;
 }
@@ -534,7 +476,6 @@ function openOverlay() {
     state.cursor = 0;
     state.countStr = '';
     state.pendingG = false;
-    state.openedFromIdle = true;
     pushHash();
     render();
 }
@@ -547,16 +488,8 @@ function closeOverlay() {
     state.countStr = '';
     state.pendingG = false;
     $searchBar.classList.add('hidden');
-    if (location.hash) {
-        if (state.openedFromIdle) {
-            history.go(-2);
-        } else {
-            history.back();
-        }
-    } else {
-        render();
-    }
-    state.openedFromIdle = false;
+    history.replaceState(null, '', '');
+    render();
 }
 
 function openFile(index) {
@@ -745,7 +678,6 @@ document.addEventListener('keydown', e => {
 });
 
 // ── Init ─────────────────────────────────────────────
-initBackground();
 if (location.hash) {
     handleHash();
 } else {

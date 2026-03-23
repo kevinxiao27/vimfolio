@@ -6,23 +6,23 @@
 }
 
 :root {
-  /* Tokyo Night */
-  --bg: #1a1b26;
-  --bg-highlight: #24283b;
-  --fg: #c0caf5;
-  --fg-dim: #565f89;
-  --blue: #7aa2f7;
-  --cyan: #7dcfff;
-  --green: #9ece6a;
-  --orange: #ff9e64;
-  --purple: #bb9af7;
-  --red: #f7768e;
-  --yellow: #e0af68;
-  --teal: #73daca;
-  --border: rgba(122, 162, 247, 0.12);
-  --window-bg: rgba(26, 27, 38, 0.82);
-  --cursor-bg: rgba(122, 162, 247, 0.07);
-  --cursor-border: var(--blue);
+  /* Default zsh */
+  --bg: #000000;
+  --bg-highlight: #1a1a1a;
+  --fg: #e0e0e0;
+  --fg-dim: #808080;
+  --blue: #ffffff;
+  --cyan: #ffffff;
+  --green: #ffffff;
+  --orange: #ffffff;
+  --purple: #ffffff;
+  --red: #ffffff;
+  --yellow: #ffffff;
+  --teal: #ffffff;
+  --border: rgba(255, 255, 255, 0.1);
+  --window-bg: rgba(0, 0, 0, 0.9);
+  --cursor-bg: rgba(255, 255, 255, 0.06);
+  --cursor-border: #ffffff;
   --font: 'JetBrains Mono', 'Cascadia Code', 'Fira Code', monospace;
   --font-size: 14px;
   --line-height: 1.7;
@@ -40,32 +40,38 @@ html, body {
 
 .hidden { display: none !important; }
 
-/* ── Background Terminal ─────────────────────── */
+/* ── Background Noise ─────────────────────────── */
 #background {
   position: fixed;
   inset: 0;
-  overflow: hidden;
   z-index: 0;
-}
-
-.bg-terminal {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  padding: 20px 30px;
-  font-size: 11px;
-  line-height: 1.5;
-  color: rgba(122, 162, 247, 0.04);
-  white-space: pre;
-  animation: bg-scroll 120s linear infinite;
   pointer-events: none;
   user-select: none;
 }
 
-@keyframes bg-scroll {
-  0%   { transform: translateY(0); }
-  100% { transform: translateY(-50%); }
+#background::before {
+  content: '';
+  position: absolute;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5' numOctaves='8' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.24;
+  animation: noise-drift 8s steps(11) infinite;
+}
+
+@keyframes noise-drift {
+  0%   { transform: translate(0, 0); }
+  10%  { transform: translate(-5%, -5%); }
+  20%  { transform: translate(-10%, 5%); }
+  30%  { transform: translate(5%, -10%); }
+  40%  { transform: translate(-5%, 15%); }
+  50%  { transform: translate(-10%, 5%); }
+  60%  { transform: translate(15%, 0); }
+  70%  { transform: translate(0, 10%); }
+  80%  { transform: translate(-15%, 0); }
+  90%  { transform: translate(10%, 5%); }
+  100% { transform: translate(5%, 0); }
 }
 
 /* ── Terminal Window ─────────────────────────── */
@@ -85,9 +91,9 @@ html, body {
   flex-direction: column;
   z-index: 10;
   box-shadow:
-    0 0 0 1px rgba(122, 162, 247, 0.04),
+    0 0 0 1px rgba(255, 255, 255, 0.04),
     0 25px 60px rgba(0, 0, 0, 0.5),
-    0 0 80px rgba(122, 162, 247, 0.03);
+    0 0 80px rgba(255, 255, 255, 0.03);
   overflow: hidden;
 }
 
@@ -104,11 +110,11 @@ html, body {
 #content::-webkit-scrollbar { width: 6px; }
 #content::-webkit-scrollbar-track { background: transparent; }
 #content::-webkit-scrollbar-thumb {
-  background: rgba(122, 162, 247, 0.1);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 3px;
 }
 #content::-webkit-scrollbar-thumb:hover {
-  background: rgba(122, 162, 247, 0.2);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 /* ── File Tree ───────────────────────────────── */
@@ -264,7 +270,7 @@ html, body {
 .content-line .link {
   color: var(--cyan);
   text-decoration: none;
-  border-bottom: 1px solid rgba(125, 207, 255, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   transition: border-color 0.2s, color 0.2s;
 }
 
@@ -298,7 +304,7 @@ html, body {
 
 .file-content .divider {
   border: none;
-  border-top: 1px solid rgba(122, 162, 247, 0.08);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
   margin: 20px 0;
 }
 
@@ -313,7 +319,7 @@ html, body {
 .file-content .link {
   color: var(--cyan);
   text-decoration: none;
-  border-bottom: 1px solid rgba(125, 207, 255, 0.25);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
   transition: border-color 0.2s, color 0.2s;
 }
 
@@ -390,8 +396,8 @@ html, body {
 .splash .hint kbd {
   display: inline-block;
   padding: 2px 8px;
-  background: rgba(122, 162, 247, 0.08);
-  border: 1px solid rgba(122, 162, 247, 0.15);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 4px;
   font-family: var(--font);
   font-size: 13px;
@@ -409,7 +415,7 @@ html, body {
   align-items: center;
   justify-content: space-between;
   padding: 6px 16px;
-  background: rgba(122, 162, 247, 0.02);
+  background: rgba(255, 255, 255, 0.02);
   border-top: 1px solid var(--border);
   font-size: 12px;
   flex-shrink: 0;
@@ -423,12 +429,12 @@ html, body {
   font-size: 11px;
   padding: 2px 8px;
   border-radius: 3px;
-  background: rgba(158, 206, 106, 0.1);
+  background: rgba(255, 255, 255, 0.08);
   color: var(--green);
 }
 
 #mode-indicator.search-mode {
-  background: rgba(224, 175, 104, 0.1);
+  background: rgba(255, 255, 255, 0.08);
   color: var(--yellow);
 }
 
@@ -464,7 +470,7 @@ html, body {
   transform: translateX(-50%);
   display: flex;
   align-items: center;
-  background: rgba(26, 27, 38, 0.96);
+  background: rgba(0, 0, 0, 0.96);
   backdrop-filter: blur(20px);
   border: 1px solid var(--border);
   border-radius: 6px;
@@ -550,6 +556,6 @@ html, body {
 
 /* ── Selection ───────────────────────────────── */
 ::selection {
-  background: rgba(122, 162, 247, 0.2);
+  background: rgba(255, 255, 255, 0.2);
   color: var(--fg);
 }
