@@ -44,6 +44,12 @@ const EXPERIENCE = [
 
 const PROJECTS = [
   {
+    name: 'PSync — P2P File System Mirroring',
+    date: 'December 2025',
+    desc: 'A peer-to-peer application layer protocol for mirroring file systems across devices. Built a signalling server for WebRTC peer discovery with public key authentication, a daemon that watches for filesystem changes and broadcasts them to peers with vector clock-based conflict resolution, and a Merkle tree structure for efficient synchronization. Designed for near real-time sync of Obsidian vaults without cloud storage.',
+    link: 'https://github.com/kevinxiao27/psync',
+  },
+  {
     name: 'Nerve — Real-Time Emergency Dispatch Dashboard',
     date: 'March 2025',
     desc: 'ProductX Hackathon (2nd Place & CDL/Venture Founder Prize). Won $500 prize out of 60+ teams, plus CDL & Venture Founder awards. Built a real-time dashboard to stream body-cam video/audio from field units with AI-powered event summarization and sentiment detection using TensorFlow. Led architecture and data ingestion using Socket.io, Express.js, Supabase, and AssemblyAI — batching videos for ingestion and streaming updates over WebSockets.',
