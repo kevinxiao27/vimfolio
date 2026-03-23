@@ -108,6 +108,7 @@ const $searchInput = document.getElementById('search-input');
 const $commandBar = document.getElementById('command-bar');
 const $commandInput = document.getElementById('command-input');
 const $countDisplay = document.getElementById('count-display');
+const $notification = document.getElementById('notification');
 
 
 // ── Hash Routing ──────────────────────────────────────
@@ -173,6 +174,13 @@ window.addEventListener('popstate', handleHash);
 
 function escapeHtml(s) {
     return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function showNotification(msg) {
+    $notification.textContent = msg;
+    $notification.classList.remove('hidden');
+    clearTimeout(showNotification._t);
+    showNotification._t = setTimeout(() => $notification.classList.add('hidden'), 1500);
 }
 
 function extractDomain(url) {
@@ -373,7 +381,7 @@ function renderFileContent() {
 
     // auto-scroll to keep cursor visible
     const cursorEl = $content.querySelector('.content-line.cursor');
-    if (cursorEl) {
+    if (cursorEl && state.contentCursor > 0) {
         const containerRect = $content.getBoundingClientRect();
         const cursorRect = cursorEl.getBoundingClientRect();
         if (cursorRect.top < containerRect.top + 64) {
@@ -636,6 +644,10 @@ document.addEventListener('keydown', e => {
                 getCount();
                 openCommand();
                 break;
+            case 'i':
+                showNotification('E21: read-only mode');
+                getCount();
+                break;
             default:
                 getCount();
                 break;
@@ -709,6 +721,10 @@ document.addEventListener('keydown', e => {
             case ':':
                 getCount();
                 openCommand();
+                break;
+            case 'i':
+                showNotification('E21: read-only mode');
+                getCount();
                 break;
             default:
                 getCount();
