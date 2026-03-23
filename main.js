@@ -105,6 +105,8 @@ const $currentPath = document.getElementById('current-path');
 const $cursorPos = document.getElementById('cursor-pos');
 const $searchBar = document.getElementById('search-bar');
 const $searchInput = document.getElementById('search-input');
+const $commandBar = document.getElementById('command-bar');
+const $commandInput = document.getElementById('command-input');
 const $countDisplay = document.getElementById('count-display');
 
 
@@ -421,6 +423,36 @@ $searchInput.addEventListener('keydown', e => {
     if (e.key === 'ArrowUp') { e.preventDefault(); state.cursor--; clampCursor(); render(); return; }
 });
 
+// ── Command Mode ─────────────────────────────────────
+
+function openCommand() {
+    $commandBar.classList.remove('hidden');
+    $commandInput.value = '';
+    $commandInput.focus();
+}
+
+function closeCommand() {
+    $commandBar.classList.add('hidden');
+    $commandInput.blur();
+}
+
+function executeCommand(cmd) {
+    const trimmed = cmd.trim();
+    if (trimmed === 'wq' || trimmed === 'q' || trimmed === 'q!' || trimmed === 'qa') {
+        closeOverlay();
+    }
+}
+
+$commandInput.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { e.preventDefault(); closeCommand(); return; }
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        executeCommand($commandInput.value);
+        closeCommand();
+        return;
+    }
+});
+
 // ── Click Handling ────────────────────────────────────
 
 $content.addEventListener('click', e => {
@@ -522,6 +554,7 @@ let gTimeout = null;
 
 document.addEventListener('keydown', e => {
     if (document.activeElement === $searchInput) return;
+    if (document.activeElement === $commandInput) return;
     if (e.ctrlKey || e.metaKey || e.altKey) return;
     const key = e.key;
 
@@ -599,6 +632,10 @@ document.addEventListener('keydown', e => {
                 getCount();
                 openSearch();
                 break;
+            case ':':
+                getCount();
+                openCommand();
+                break;
             default:
                 getCount();
                 break;
@@ -669,6 +706,10 @@ document.addEventListener('keydown', e => {
                 getCount();
                 break;
             }
+            case ':':
+                getCount();
+                openCommand();
+                break;
             default:
                 getCount();
                 break;

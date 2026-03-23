@@ -501,6 +501,46 @@ html, body {
   color: var(--fg-dim);
 }
 
+/* ── Command Bar ──────────────────────────────── */
+#command-bar {
+  position: fixed;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.96);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 12px;
+  z-index: 20;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+}
+
+#command-bar::before {
+  content: ':';
+  color: var(--fg);
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+#command-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--fg);
+  font-family: var(--font);
+  font-size: 14px;
+  width: 200px;
+  caret-color: var(--fg);
+}
+
+#command-input::placeholder {
+  color: var(--fg-dim);
+}
+
 /* ── Back Button ──────────────────────────────── */
 .back-btn {
   display: flex;
