@@ -121,12 +121,16 @@ html, body {
   align-items: center;
   padding: 0 20px;
   height: 32px;
-  cursor: default;
+  cursor: pointer;
   position: relative;
   transition: background 0.08s;
 }
 
 .file-line.cursor {
+  background: var(--cursor-bg);
+}
+
+.file-line:hover {
   background: var(--cursor-bg);
 }
 
@@ -196,6 +200,10 @@ html, body {
 }
 
 .content-line.cursor {
+  background: var(--cursor-bg);
+}
+
+.content-line:hover {
   background: var(--cursor-bg);
 }
 
@@ -376,6 +384,7 @@ html, body {
   color: var(--fg-dim);
   font-size: 13px;
   animation: pulse 2s ease-in-out infinite;
+  cursor: pointer;
 }
 
 .splash .hint kbd {
@@ -484,6 +493,29 @@ html, body {
 
 #search-input::placeholder {
   color: var(--fg-dim);
+}
+
+/* ── Back Button ──────────────────────────────── */
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 20px;
+  color: var(--fg-dim);
+  font-size: 12px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.08s, color 0.08s;
+  border-bottom: 1px solid var(--border);
+}
+
+.back-btn:hover {
+  background: var(--cursor-bg);
+  color: var(--blue);
+}
+
+.back-arrow {
+  font-size: 14px;
 }
 
 /* ── No Results ──────────────────────────────── */

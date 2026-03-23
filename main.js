@@ -142,6 +142,7 @@ const state = {
   searchQuery: '',
   countStr: '',
   pendingG: false,
+  openedFromIdle: false,
 };
 
 // ── DOM ──────────────────────────────────────────────
@@ -155,6 +156,63 @@ const $searchInput = document.getElementById('search-input');
 const $bgContent = document.getElementById('bg-content');
 const $countDisplay = document.getElementById('count-display');
 
+
+// ── Hash Routing ──────────────────────────────────────
+
+function getHashForState() {
+  if (state.mode === Mode.FILE_CONTENT && state.openFile) return '#/' + state.openFile;
+  if (state.overlayOpen) return '#/';
+  return '';
+}
+
+function updateHash() {
+  history.replaceState(null, '', getHashForState());
+}
+
+function pushHash() {
+  history.pushState(null, '', getHashForState());
+}
+
+function handleHash() {
+  const h = location.hash;
+  if (h.startsWith('#/') && h.length > 2) {
+    const fileName = h.slice(2);
+    if (FILES.some(f => f.name === fileName)) {
+      state.mode = Mode.FILE_CONTENT;
+      state.openFile = fileName;
+      state.contentCursor = 0;
+      state.overlayOpen = true;
+      state.countStr = '';
+      state.pendingG = false;
+      state.searchQuery = '';
+      $searchBar.classList.add('hidden');
+      render();
+      return;
+    }
+  }
+  if (h === '#/') {
+    state.mode = Mode.FILE_TREE;
+    state.overlayOpen = true;
+    state.openFile = null;
+    state.cursor = 0;
+    state.countStr = '';
+    state.pendingG = false;
+    state.searchQuery = '';
+    $searchBar.classList.add('hidden');
+    render();
+    return;
+  }
+  state.mode = Mode.IDLE;
+  state.overlayOpen = false;
+  state.openFile = null;
+  state.searchQuery = '';
+  state.countStr = '';
+  state.pendingG = false;
+  $searchBar.classList.add('hidden');
+  render();
+}
+
+window.addEventListener('popstate', handleHash);
 
 // ── Background ───────────────────────────────────────
 
@@ -301,7 +359,7 @@ function renderSplash() {
         <a href="https://github.com/kevinxiao27" target="_blank" rel="noopener">github.com/kevinxiao27</a>
         <a href="https://www.linkedin.com/in/kevinxiaoxyz/" target="_blank" rel="noopener">linkedin.com/in/kevinxiaoxyz</a>
       </div>
-      <div class="hint">press <kbd>-</kbd> to explore. Oil.nvim >> </div>
+      <div class="hint" id="splash-hint">press <kbd>-</kbd> to explore. Oil.nvim >> </div>
     </div>
   `;
 }
@@ -348,6 +406,7 @@ function renderFileContent() {
   if (state.contentCursor >= lines.length) state.contentCursor = lines.length - 1;
 
   let html = '<div class="content-lines">';
+  html += '<div class="back-btn"><span class="back-arrow">←</span> back to file tree</div>';
   lines.forEach((line, i) => {
     const isCursor = i === state.contentCursor;
     const dist = Math.abs(i - state.contentCursor);
@@ -414,6 +473,53 @@ $searchInput.addEventListener('keydown', e => {
   if (e.key === 'ArrowUp') { e.preventDefault(); state.cursor--; clampCursor(); render(); return; }
 });
 
+// ── Click Handling ────────────────────────────────────
+
+$content.addEventListener('click', e => {
+  // don't intercept link clicks
+  if (e.target.closest('a')) return;
+
+  // splash: click hint to open overlay
+  if (state.mode === Mode.IDLE) {
+    if (e.target.closest('#splash-hint') || e.target.closest('.splash')) {
+      openOverlay();
+    }
+    return;
+  }
+
+  // file tree: click a file entry to open it
+  if (state.mode === Mode.FILE_TREE || state.mode === Mode.SEARCH) {
+    const fileLine = e.target.closest('.file-line');
+    if (fileLine) {
+      const idx = parseInt(fileLine.dataset.index, 10);
+      if (!isNaN(idx)) {
+        state.cursor = idx;
+        openFile(idx);
+      }
+    }
+    return;
+  }
+
+  // file content: click a line to move cursor, or back button
+  if (state.mode === Mode.FILE_CONTENT) {
+    if (e.target.closest('.back-btn')) {
+      closeFile();
+      return;
+    }
+    const contentLine = e.target.closest('.content-line');
+    if (contentLine) {
+      const lines = Array.from($content.querySelectorAll('.content-line'));
+      const idx = lines.indexOf(contentLine);
+      if (idx >= 0) {
+        state.contentCursor = idx;
+        updateHash();
+        render();
+      }
+    }
+    return;
+  }
+});
+
 // ── Overlay ──────────────────────────────────────────
 
 function openOverlay() {
@@ -422,6 +528,8 @@ function openOverlay() {
   state.cursor = 0;
   state.countStr = '';
   state.pendingG = false;
+  state.openedFromIdle = true;
+  pushHash();
   render();
 }
 
@@ -432,17 +540,28 @@ function closeOverlay() {
   state.searchQuery = '';
   state.countStr = '';
   state.pendingG = false;
+  state.openedFromIdle = false;
   $searchBar.classList.add('hidden');
-  render();
+  if (location.hash) {
+    history.back();
+  } else {
+    render();
+  }
 }
 
 function openFile(index) {
   const files = getVisibleFiles();
   if (index < 0 || index >= files.length) return;
+  const wasContent = state.mode === Mode.FILE_CONTENT;
   state.mode = Mode.FILE_CONTENT;
   state.openFile = files[index].name;
   state.contentCursor = 0;
   state.countStr = '';
+  if (wasContent) {
+    updateHash();
+  } else {
+    pushHash();
+  }
   render();
 }
 
@@ -450,6 +569,7 @@ function closeFile() {
   state.mode = Mode.FILE_TREE;
   state.openFile = null;
   state.contentCursor = 0;
+  updateHash();
   render();
 }
 
@@ -616,4 +736,8 @@ document.addEventListener('keydown', e => {
 
 // ── Init ─────────────────────────────────────────────
 initBackground();
-render();
+if (location.hash) {
+  handleHash();
+} else {
+  render();
+}
