@@ -84,7 +84,7 @@ const PROJECTS = [
 
 // ── State ────────────────────────────────────────────
 
-const Mode = { IDLE: 'IDLE', FILE_TREE: 'FILE_TREE', FILE_CONTENT: 'FILE_CONTENT', SEARCH: 'SEARCH' };
+const Mode = { IDLE: 'IDLE', FILE_TREE: 'FILE_TREE', FILE_CONTENT: 'FILE_CONTENT' };
 
 const state = {
     mode: Mode.IDLE,
@@ -92,7 +92,6 @@ const state = {
     cursor: 0,
     contentCursor: 0,
     openFile: null,
-    searchQuery: '',
     countStr: '',
     pendingG: false,
 };
@@ -103,8 +102,6 @@ const $content = document.getElementById('content');
 const $modeIndicator = document.getElementById('mode-indicator');
 const $currentPath = document.getElementById('current-path');
 const $cursorPos = document.getElementById('cursor-pos');
-const $searchBar = document.getElementById('search-bar');
-const $searchInput = document.getElementById('search-input');
 const $commandBar = document.getElementById('command-bar');
 const $commandInput = document.getElementById('command-input');
 const $countDisplay = document.getElementById('count-display');
@@ -138,8 +135,6 @@ function handleHash() {
             state.overlayOpen = true;
             state.countStr = '';
             state.pendingG = false;
-            state.searchQuery = '';
-            $searchBar.classList.add('hidden');
             render();
             return;
         }
@@ -151,18 +146,14 @@ function handleHash() {
         state.cursor = 0;
         state.countStr = '';
         state.pendingG = false;
-        state.searchQuery = '';
-        $searchBar.classList.add('hidden');
         render();
         return;
     }
     state.mode = Mode.IDLE;
     state.overlayOpen = false;
     state.openFile = null;
-    state.searchQuery = '';
     state.countStr = '';
     state.pendingG = false;
-    $searchBar.classList.add('hidden');
     render();
 }
 
@@ -189,7 +180,6 @@ function extractDomain(url) {
 }
 
 function getVisibleFiles() {
-    if (state.searchQuery) return FILES.filter(f => f.name.toLowerCase().includes(state.searchQuery.toLowerCase()));
     return FILES;
 }
 
@@ -283,20 +273,19 @@ function render() {
         case Mode.IDLE: renderSplash(); break;
         case Mode.FILE_TREE: renderFileTree(); break;
         case Mode.FILE_CONTENT: renderFileContent(); break;
-        case Mode.SEARCH: renderFileTree(); break;
     }
     updateStatusBar();
 }
 
 function updateStatusBar() {
-    $modeIndicator.textContent = state.mode === Mode.SEARCH ? 'SEARCH' : 'NORMAL';
-    $modeIndicator.className = state.mode === Mode.SEARCH ? 'search-mode' : '';
+    $modeIndicator.textContent = 'NORMAL';
+    $modeIndicator.className = '';
 
     const path = state.mode === Mode.FILE_CONTENT ? `~/portfolio/${state.openFile}` : '~/portfolio';
     $currentPath.textContent = path;
 
-    if (state.mode === Mode.FILE_TREE || state.mode === Mode.SEARCH) {
-        $cursorPos.textContent = `${state.cursor + 1}/${getVisibleFiles().length}`;
+    if (state.mode === Mode.FILE_TREE) {
+        $cursorPos.textContent = `${state.cursor + 1}/${FILES.length}`;
     } else if (state.mode === Mode.FILE_CONTENT) {
         $cursorPos.innerHTML = '<span class="readonly-badge">[readonly]</span>';
     } else {
@@ -323,11 +312,7 @@ function renderSplash() {
 }
 
 function renderFileTree() {
-    const files = getVisibleFiles();
-    if (files.length === 0) {
-        $content.innerHTML = '<div class="no-results">no matches found</div>';
-        return;
-    }
+    const files = FILES;
     if (state.cursor >= files.length) state.cursor = files.length - 1;
 
     let html = '<div class="file-tree">';
@@ -392,45 +377,6 @@ function renderFileContent() {
     }
 }
 
-// ── Search ───────────────────────────────────────────
-
-function openSearch() {
-    state.mode = Mode.SEARCH;
-    state.searchQuery = '';
-    state.countStr = '';
-    $searchBar.classList.remove('hidden');
-    $searchInput.value = '';
-    $searchInput.focus();
-    render();
-}
-
-function closeSearch() {
-    state.mode = Mode.FILE_TREE;
-    state.searchQuery = '';
-    $searchBar.classList.add('hidden');
-    $searchInput.blur();
-    clampCursor();
-    render();
-}
-
-$searchInput.addEventListener('input', e => {
-    state.searchQuery = e.target.value;
-    state.cursor = 0;
-    render();
-});
-
-$searchInput.addEventListener('keydown', e => {
-    if (e.key === 'Escape') { e.preventDefault(); closeSearch(); return; }
-    if (e.key === 'Enter') {
-        e.preventDefault();
-        const files = getVisibleFiles();
-        if (files.length > 0) { closeSearch(); openFile(state.cursor); }
-        return;
-    }
-    if (e.key === 'ArrowDown') { e.preventDefault(); state.cursor++; clampCursor(); render(); return; }
-    if (e.key === 'ArrowUp') { e.preventDefault(); state.cursor--; clampCursor(); render(); return; }
-});
-
 // ── Command Mode ─────────────────────────────────────
 
 function openCommand() {
@@ -476,7 +422,7 @@ $content.addEventListener('click', e => {
     }
 
     // file tree: click a file entry to open it
-    if (state.mode === Mode.FILE_TREE || state.mode === Mode.SEARCH) {
+    if (state.mode === Mode.FILE_TREE) {
         const fileLine = e.target.closest('.file-line');
         if (fileLine) {
             const idx = parseInt(fileLine.dataset.index, 10);
@@ -524,10 +470,8 @@ function closeOverlay() {
     state.overlayOpen = false;
     state.mode = Mode.IDLE;
     state.openFile = null;
-    state.searchQuery = '';
     state.countStr = '';
     state.pendingG = false;
-    $searchBar.classList.add('hidden');
     history.replaceState(null, '', '');
     render();
 }
@@ -561,7 +505,6 @@ function closeFile() {
 let gTimeout = null;
 
 document.addEventListener('keydown', e => {
-    if (document.activeElement === $searchInput) return;
     if (document.activeElement === $commandInput) return;
     if (e.ctrlKey || e.metaKey || e.altKey) return;
     const key = e.key;
@@ -627,19 +570,11 @@ document.addEventListener('keydown', e => {
             case 'G': {
                 const n = getCount();
                 state.cursor = n > 1
-                    ? Math.min(n - 1, getVisibleFiles().length - 1)
-                    : getVisibleFiles().length - 1;
+                    ? Math.min(n - 1, FILES.length - 1)
+                    : FILES.length - 1;
                 render();
                 break;
             }
-            case 'g':
-                state.pendingG = true;
-                gTimeout = setTimeout(() => { state.pendingG = false; }, 500);
-                break;
-            case '/':
-                getCount();
-                openSearch();
-                break;
             case ':':
                 getCount();
                 openCommand();
@@ -709,7 +644,6 @@ document.addEventListener('keydown', e => {
                 break;
             }
             case 'l': case 'ArrowRight': {
-                // follow link under cursor
                 const cursorEl = $content.querySelector('.content-line.cursor');
                 if (cursorEl) {
                     const link = cursorEl.querySelector('a.link');
