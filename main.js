@@ -583,6 +583,10 @@ document.addEventListener('keydown', e => {
                 getCount();
                 closeOverlay();
                 break;
+            case 'g':
+                state.pendingG = true;
+                gTimeout = setTimeout(() => { state.pendingG = false; }, 500);
+                break;
             case 'G': {
                 const n = getCount();
                 state.cursor = n > 1
