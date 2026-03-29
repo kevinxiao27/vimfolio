@@ -332,6 +332,20 @@ function renderFileTree() {
     });
     html += '</div>';
     $content.innerHTML = html;
+
+    // auto-scroll to keep cursor visible
+    const cursorEl = $content.querySelector('.file-line.cursor');
+    if (cursorEl) {
+        const containerRect = $content.getBoundingClientRect();
+        const cursorRect = cursorEl.getBoundingClientRect();
+        if (state.cursor === 0) {
+            $content.scrollTop = 0;
+        } else if (cursorRect.top < containerRect.top + 32) {
+            cursorEl.scrollIntoView({ block: 'start', behavior: 'instant' });
+        } else if (cursorRect.bottom > containerRect.bottom - 32) {
+            cursorEl.scrollIntoView({ block: 'end', behavior: 'instant' });
+        }
+    }
 }
 
 function renderFileContent() {
@@ -363,13 +377,15 @@ function renderFileContent() {
     });
     html += '</div>';
     $content.innerHTML = html;
-
+ 
     // auto-scroll to keep cursor visible
     const cursorEl = $content.querySelector('.content-line.cursor');
-    if (cursorEl && state.contentCursor > 0) {
+    if (cursorEl) {
         const containerRect = $content.getBoundingClientRect();
         const cursorRect = cursorEl.getBoundingClientRect();
-        if (cursorRect.top < containerRect.top + 64) {
+        if (state.contentCursor === 0) {
+            $content.scrollTop = 0;
+        } else if (cursorRect.top < containerRect.top + 64) {
             cursorEl.scrollIntoView({ block: 'start', behavior: 'instant' });
         } else if (cursorRect.bottom > containerRect.bottom - 32) {
             cursorEl.scrollIntoView({ block: 'end', behavior: 'instant' });
