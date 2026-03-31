@@ -84,7 +84,7 @@ const PROJECTS = [
 
 // ── State ────────────────────────────────────────────
 
-const Mode = { IDLE: 'IDLE', FILE_TREE: 'FILE_TREE', FILE_CONTENT: 'FILE_CONTENT' };
+const Mode = { IDLE: 'IDLE', FILE_TREE: 'FILE_TREE', FILE_CONTENT: 'FILE_CONTENT', HELP: 'HELP', KILLED: 'KILLED' };
 
 const state = {
     mode: Mode.IDLE,
@@ -99,6 +99,7 @@ const state = {
 // ── DOM ──────────────────────────────────────────────
 
 const $content = document.getElementById('content');
+const $terminal = document.getElementById('terminal');
 const $modeIndicator = document.getElementById('mode-indicator');
 const $currentPath = document.getElementById('current-path');
 const $cursorPos = document.getElementById('cursor-pos');
@@ -273,15 +274,20 @@ function render() {
         case Mode.IDLE: renderSplash(); break;
         case Mode.FILE_TREE: renderFileTree(); break;
         case Mode.FILE_CONTENT: renderFileContent(); break;
+        case Mode.HELP: renderHelp(); break;
+        case Mode.KILLED: renderKillScreen(); break;
     }
     updateStatusBar();
 }
 
 function updateStatusBar() {
-    $modeIndicator.textContent = 'NORMAL';
+    $modeIndicator.textContent = state.mode === Mode.KILLED ? 'KILLED' : 'NORMAL';
     $modeIndicator.className = '';
 
-    const path = state.mode === Mode.FILE_CONTENT ? `~/portfolio/${state.openFile}` : '~/portfolio';
+    let path = '~/portfolio';
+    if (state.mode === Mode.FILE_CONTENT) path = `~/portfolio/${state.openFile}`;
+    else if (state.mode === Mode.HELP) path = '~/help';
+    else if (state.mode === Mode.KILLED) path = '~/dead';
     $currentPath.textContent = path;
 
     if (state.mode === Mode.FILE_TREE) {
@@ -306,7 +312,7 @@ function renderSplash() {
         <a href="https://www.linkedin.com/in/kevinxiaoxyz/" target="_blank" rel="noopener">linkedin.com/in/kevinxiaoxyz</a>
         <a href="mailto:kevin.xiao27@gmail.com" target="_blank" rel="noopener">kevin.xiao27@gmail.com</a>
       </div>
-      <div class="hint" id="splash-hint">press <kbd>-</kbd> to explore. Inspired by nvim. </div>
+      <div class="hint" id="splash-hint">press <kbd>-</kbd> to explore. type <kbd>:help</kbd> for commands.</div>
     </div>
   `;
 }
@@ -393,6 +399,68 @@ function renderFileContent() {
     }
 }
 
+function renderHelp() {
+    const lines = [
+        { html: '<span class="heading">Navigation</span>' },
+        { html: '' },
+        { html: '  <span class="prompt">-</span>           open / close file tree' },
+        { html: '  <span class="prompt">j</span> / <span class="prompt">k</span>       move cursor down / up' },
+        { html: '  <span class="prompt">l</span> / <span class="prompt">Enter</span>   open file / follow link' },
+        { html: '  <span class="prompt">h</span> / <span class="prompt">Esc</span>     go back' },
+        { html: '  <span class="prompt">gg</span>          go to first line' },
+        { html: '  <span class="prompt">G</span>           go to last line' },
+        { html: '' },
+        { html: '<span class="heading">Commands</span>' },
+        { html: '' },
+        { html: '  <span class="prompt">:help</span>       show this help' },
+        { html: '  <span class="prompt">:kill</span>       terminate portfolio' },
+        { html: '  <span class="prompt">:q</span>          close overlay' },
+        { html: '  <span class="prompt">:fullscreen</span> toggle fullscreen' },
+        { html: '' },
+        { html: '<span class="heading">Title Bar</span>' },
+        { html: '' },
+        { html: '  <span class="help-dot-red">&#9679;</span> red       terminate portfolio' },
+        { html: '  <span class="prompt">&#9679;</span> green     toggle fullscreen' },
+        { html: '' },
+        { html: '<span class="heading">Files</span>' },
+        { html: '' },
+        { html: '  <span class="prompt">home.md</span>        about me' },
+        { html: '  <span class="prompt">experience.md</span>   work history' },
+        { html: '  <span class="prompt">projects.md</span>     selected projects' },
+        { html: '' },
+        { html: '<span class="divider-line">────────────────────────────────────────</span>' },
+        { html: '' },
+        { html: '<span class="subheading">press any key to close</span>' },
+    ];
+
+    let html = '<div class="content-lines help-screen">';
+    lines.forEach((line, i) => {
+        html += `
+      <div class="content-line">
+        <span class="line-number" style="visibility:hidden">0</span>
+        <span class="line-text">${line.html}</span>
+      </div>
+    `;
+    });
+    html += '</div>';
+    $content.innerHTML = html;
+}
+
+function renderKillScreen() {
+    $content.innerHTML = `
+    <div class="kill-screen">
+      <div class="kill-command">$ kill -9 portfolio</div>
+      <div class="kill-msg">&cross; Process terminated.</div>
+      <div class="kill-sub">But I'm still here. Contact me:</div>
+      <div class="kill-links">
+        <a href="https://github.com/kevinxiao27" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/kevinxiaoxyz/" target="_blank" rel="noopener">LinkedIn</a>
+        <span class="kill-reopen" id="kill-reopen">Reopen terminal</span>
+      </div>
+    </div>
+  `;
+}
+
 // ── Command Mode ─────────────────────────────────────
 
 function openCommand() {
@@ -409,17 +477,57 @@ function closeCommand() {
 function executeCommand(cmd) {
     const trimmed = cmd.trim();
     if (trimmed === 'wq' || trimmed === 'q' || trimmed === 'q!' || trimmed === 'qa') {
-        closeOverlay();
+        if (state.mode === Mode.IDLE) {
+            triggerKill();
+        } else {
+            closeOverlay();
+        }
+    } else if (trimmed === 'help') {
+        state.mode = Mode.HELP;
+        state.overlayOpen = false;
+        history.replaceState(null, '', '');
+        render();
+    } else if (trimmed === 'kill') {
+        triggerKill();
+    } else if (trimmed === 'fullscreen') {
+        toggleFullscreen();
     }
 }
 
 $commandInput.addEventListener('keydown', e => {
+    e.stopPropagation();
     if (e.key === 'Escape') { e.preventDefault(); closeCommand(); return; }
     if (e.key === 'Enter') {
         e.preventDefault();
         executeCommand($commandInput.value);
         closeCommand();
         return;
+    }
+});
+
+// ── Title Bar Dots ────────────────────────────────────
+
+function toggleFullscreen() {
+    $terminal.classList.toggle('terminal-fullscreen');
+}
+
+function triggerKill() {
+    state.mode = Mode.KILLED;
+    state.overlayOpen = false;
+    state.openFile = null;
+    state.countStr = '';
+    state.pendingG = false;
+    history.replaceState(null, '', '');
+    render();
+}
+
+document.getElementById('title-bar').addEventListener('click', e => {
+    const dot = e.target.closest('.dot');
+    if (!dot) return;
+    if (dot.classList.contains('dot-red')) {
+        triggerKill();
+    } else if (dot.classList.contains('dot-green')) {
+        toggleFullscreen();
     }
 });
 
@@ -434,6 +542,22 @@ $content.addEventListener('click', e => {
         if (e.target.closest('#splash-hint') || e.target.closest('.splash')) {
             openOverlay();
         }
+        return;
+    }
+
+    // kill screen: click reopen
+    if (state.mode === Mode.KILLED) {
+        if (e.target.closest('#kill-reopen')) {
+            state.mode = Mode.IDLE;
+            render();
+        }
+        return;
+    }
+
+    // help: click anywhere to dismiss
+    if (state.mode === Mode.HELP) {
+        state.mode = Mode.IDLE;
+        render();
         return;
     }
 
@@ -523,6 +647,21 @@ let gTimeout = null;
 document.addEventListener('keydown', e => {
     if (document.activeElement === $commandInput) return;
     if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+    // killed: block all input
+    if (state.mode === Mode.KILLED) {
+        e.preventDefault();
+        return;
+    }
+
+    // help: dismiss on any key
+    if (state.mode === Mode.HELP) {
+        e.preventDefault();
+        state.mode = Mode.IDLE;
+        render();
+        return;
+    }
+
     const key = e.key;
 
     // global: toggle overlay / back
@@ -538,7 +677,14 @@ document.addEventListener('keydown', e => {
         return;
     }
 
-    if (state.mode === Mode.IDLE) return;
+    if (state.mode === Mode.IDLE) {
+        if (key === ':') {
+            e.preventDefault();
+            e.stopPropagation();
+            openCommand();
+        }
+        return;
+    }
 
     // ── FILE_TREE ──────────────────────────────────────
     if (state.mode === Mode.FILE_TREE) {
