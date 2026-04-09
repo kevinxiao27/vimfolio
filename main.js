@@ -1,7 +1,36 @@
 const FILES = [
     { name: 'home.md', type: 'file' },
+    { name: 'education.md', type: 'file' },
     { name: 'experience.md', type: 'file' },
     { name: 'projects.md', type: 'file' },
+];
+
+const EDUCATION = [
+    {
+        school: 'University of British Columbia',
+        degree: 'Bachelors in Computer Science and Business, B.Comm',
+        date: 'Expected May 2027',
+        location: 'Vancouver, BC',
+        gpa: '4.33/4.33 (92%)',
+        awards: [
+            'Ranked 2/737',
+            'Top Junior Student Award (2/2000)',
+            'Trek Excellence Scholarship (Top 5%)',
+            "Dean's List (3 terms)",
+            'John Young Memorial Scholarship (Top 4 ECON 101/102 students)',
+            'Sauder School of Business Scholarship',
+        ],
+        coursework: [
+            'Operating Systems (98%)',
+            'Computer Networking (100%)',
+            'Relational Databases (97%)',
+            'Software Construction (99%)',
+            'Models of Computation (98%)',
+            'Algorithms and Data Structures (94%)',
+            'Computation & Programming (99%)',
+            'Computer Systems (91%)',
+        ],
+    },
 ];
 
 const EXPERIENCE = [
@@ -246,6 +275,31 @@ function buildExperienceLines() {
     return lines;
 }
 
+function buildEducationLines() {
+    const lines = [];
+    EDUCATION.forEach((edu, i) => {
+        if (i > 0) {
+            lines.push({ html: '' });
+            lines.push({ html: '<span class="divider-line">────────────────────────────────────────</span>' });
+            lines.push({ html: '' });
+        }
+        lines.push({ html: `<span class="heading">${escapeHtml(edu.degree)}</span>` });
+        lines.push({ html: `<span class="subheading">${escapeHtml(edu.school)} · ${escapeHtml(edu.date)}</span>` });
+        lines.push({ html: `<span class="subheading">${escapeHtml(edu.location)} · GPA: ${escapeHtml(edu.gpa)}</span>` });
+        lines.push({ html: '' });
+        lines.push({ html: '<span class="prompt">Awards</span>' });
+        edu.awards.forEach(award => {
+            lines.push({ html: `<span class="prompt">▸</span> ${escapeHtml(award)}` });
+        });
+        lines.push({ html: '' });
+        lines.push({ html: '<span class="prompt">Relevant Coursework</span>' });
+        edu.coursework.forEach(course => {
+            lines.push({ html: `<span class="prompt">▸</span> ${escapeHtml(course)}` });
+        });
+    });
+    return lines;
+}
+
 function buildProjectLines() {
     const lines = [];
     PROJECTS.forEach((proj, i) => {
@@ -359,6 +413,7 @@ function renderFileContent() {
     switch (state.openFile) {
         case 'home.md': lines = buildHomeLines(); break;
         case 'experience.md': lines = buildExperienceLines(); break;
+        case 'education.md': lines = buildEducationLines(); break;
         case 'projects.md': lines = buildProjectLines(); break;
         default:
             $content.innerHTML = '<div class="no-results">file not found</div>';
@@ -425,6 +480,7 @@ function renderHelp() {
         { html: '<span class="heading">Files</span>' },
         { html: '' },
         { html: '  <span class="prompt">home.md</span>        about me' },
+        { html: '  <span class="prompt">education.md</span>    education & awards' },
         { html: '  <span class="prompt">experience.md</span>   work history' },
         { html: '  <span class="prompt">projects.md</span>     selected projects' },
         { html: '' },
@@ -434,7 +490,7 @@ function renderHelp() {
     ];
 
     let html = '<div class="content-lines help-screen">';
-    lines.forEach((line, i) => {
+    lines.forEach((line, _) => {
         html += `
       <div class="content-line">
         <span class="line-number" style="visibility:hidden">0</span>
