@@ -297,7 +297,7 @@ html, body {
 }
 
 .content-line .subheading {
-  color: var(--fg-dim);
+  color: #8a8fa0;
   font-size: 13px;
 }
 
