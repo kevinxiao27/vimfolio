@@ -247,6 +247,7 @@ function buildHomeLines() {
     return [
         { html: '<span class="heading">Kevin Xiao</span>' },
         { html: '<span class="subheading">CS + Business @ UBC · Incoming @ Tesla</span>' },
+        { html: '<span class="subheading">"Because how you do anything is how you do everything"</span>' },
         { html: '' },
         { html: '<span class="divider-line">────────────────────────────────────────</span>' },
         { html: '' },
@@ -361,6 +362,7 @@ function renderSplash() {
       <div class="name">Kevin Xiao</div>
       <div class="bio">CS + Business @ UBC</div>
       <div class="bio">Incoming @ Tesla</div>
+      <div class="bio">"Because how you do anything is how you do everything"</div>
       <div class="links">
         <a href="https://github.com/kevinxiao27" target="_blank" rel="noopener">github.com/kevinxiao27</a>
         <a href="https://www.linkedin.com/in/kevinxiaoxyz/" target="_blank" rel="noopener">linkedin.com/in/kevinxiaoxyz</a>
