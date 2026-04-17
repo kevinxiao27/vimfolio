@@ -511,6 +511,7 @@ function renderKillScreen() {
       <div class="kill-msg">&cross; Process terminated.</div>
       <div class="kill-sub">But I'm still here. Contact me:</div>
       <div class="kill-links">
+        <a href="mailto:kevin.xiao27@gmail.com" target="_blank" rel="noopener">kevin.xiao27@gmail.com</a>
         <a href="https://github.com/kevinxiao27" target="_blank" rel="noopener">GitHub</a>
         <a href="https://www.linkedin.com/in/kevinxiaoxyz/" target="_blank" rel="noopener">LinkedIn</a>
         <span class="kill-reopen" id="kill-reopen">Reopen terminal</span>
