@@ -21,7 +21,7 @@ const EDUCATION = [
             'Sauder School of Business Scholarship',
         ],
         coursework: [
-            'Intermediate Algorithm Design and Analysis - CPSC 320',
+            'Intermediate Algorithm Design and Analysis (96%) - CPSC 320',
             'Computer Networking (100%) - CPSC 317',
             'Operating Systems (98%) - CPSC 313',
             'Relational Databases (97%) - CPSC 304',
