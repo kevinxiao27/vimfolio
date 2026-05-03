@@ -40,7 +40,7 @@ const EXPERIENCE = [
         org: 'Tesla',
         link: 'https://www.tesla.com/',
         date: 'Incoming May 2026',
-        desc: 'Fleetnet and Robotaxi. Working on distributed systems',
+        desc: 'Fleetnet and Robotaxi. Working on distributed systems.',
     },
     {
         role: 'Lead Software Engineer',
