@@ -253,7 +253,7 @@ function buildHomeLines() {
         { html: '<span class="divider-line">────────────────────────────────────────</span>' },
         { html: '' },
         { html: '<span class="prompt">&gt;</span> <a class="link" href="https://github.com/kevinxiao27" target="_blank" rel="noopener">github.com/kevinxiao27</a>' },
-        { html: '<span class="prompt">&gt;</span> <a class="link" href="https://www.linkedin.com/in/kevinxiaoxyz/" target="_blank" rel="noopener">linkedin.com/in/kevinxiaoxyz</a>' },
+        { html: '<span class="prompt">&gt;</span> <a class="link" href="https://www.linkedin.com/in/kevxiao/" target="_blank" rel="noopener">linkedin.com/in/kevxiao</a>' },
         { html: '<span class="prompt">&gt;</span> <a class="link" href="mailto:kevin.xiao27@gmail.com" target="_blank" rel="noopener">kevin.xiao27@gmail.com</a>' },
         { html: '' },
         { html: '<span class="divider-line">────────────────────────────────────────</span>' },
@@ -366,7 +366,7 @@ function renderSplash() {
       <div class="bio">"Because how you do anything is how you do everything"</div>
       <div class="links">
         <a href="https://github.com/kevinxiao27" target="_blank" rel="noopener">github.com/kevinxiao27</a>
-        <a href="https://www.linkedin.com/in/kevinxiaoxyz/" target="_blank" rel="noopener">linkedin.com/in/kevinxiaoxyz</a>
+        <a href="https://www.linkedin.com/in/kevxiao/" target="_blank" rel="noopener">linkedin.com/in/kevxiao</a>
         <a href="mailto:kevin.xiao27@gmail.com" target="_blank" rel="noopener">kevin.xiao27@gmail.com</a>
       </div>
       <div class="hint" id="splash-hint">press <kbd>-</kbd> to explore. type <kbd>:help</kbd> for commands.</div>
@@ -514,7 +514,7 @@ function renderKillScreen() {
       <div class="kill-links">
         <a href="mailto:kevin.xiao27@gmail.com" target="_blank" rel="noopener">kevin.xiao27@gmail.com</a>
         <a href="https://github.com/kevinxiao27" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://www.linkedin.com/in/kevinxiaoxyz/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.linkedin.com/in/kevxiao/" target="_blank" rel="noopener">LinkedIn</a>
         <span class="kill-reopen" id="kill-reopen">Reopen terminal</span>
       </div>
     </div>
