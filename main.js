@@ -37,10 +37,10 @@ const EDUCATION = [
 const EXPERIENCE = [
     {
         role: 'Software Engineering Intern',
-        org: 'Tesla',
+        org: 'Tesla – FleetNet',
         link: 'https://www.tesla.com/',
-        date: 'Incoming May 2026',
-        desc: 'Fleetnet and Robotaxi. Working on distributed systems.',
+        date: 'May 2026 · Palo Alto, CA',
+        desc: 'Built platform infrastructure for Robotaxi and connected-vehicle systems, spanning authentication, vehicle commands, voice assistant integration tooling, and fleet connectivity.',
     },
     {
         role: 'Lead Software Engineer',
@@ -247,8 +247,8 @@ function wrapText(text, width) {
 function buildHomeLines() {
     return [
         { html: '<span class="heading">Kevin Xiao</span>' },
-        { html: '<span class="subheading">CS + Business @ UBC · Incoming @ Tesla</span>' },
-        { html: '<span class="subheading">"Because how you do anything is how you do everything"</span>' },
+        { html: '<span class="subheading">CS + Business @ UBC · Engineering @ Tesla</span>' },
+        { html: '<span class="subheading quote">because how you do anything is how you do everything</span>' },
         { html: '' },
         { html: '<span class="divider-line">────────────────────────────────────────</span>' },
         { html: '' },
@@ -362,8 +362,8 @@ function renderSplash() {
     <div class="splash">
       <div class="name">Kevin Xiao</div>
       <div class="bio">CS + Business @ UBC</div>
-      <div class="bio">Incoming @ Tesla</div>
-      <div class="bio">"Because how you do anything is how you do everything"</div>
+      <div class="bio">Engineering @ Tesla</div>
+      <div class="bio quote">because how you do anything is how you do everything</div>
       <div class="links">
         <a href="https://github.com/kevinxiao27" target="_blank" rel="noopener">github.com/kevinxiao27</a>
         <a href="https://www.linkedin.com/in/kevxiao/" target="_blank" rel="noopener">linkedin.com/in/kevxiao</a>
@@ -388,7 +388,7 @@ function renderFileTree() {
         html += `
       <div class="file-line${isCursor ? ' cursor' : ''}" data-index="${i}">
         <span class="line-number">${lineNum}</span>
-        <span class="file-icon">📄</span>
+        <span class="file-icon" aria-hidden="true"></span>
         <span class="file-name">${base}<span class="ext">${ext}</span></span>
       </div>
     `;
