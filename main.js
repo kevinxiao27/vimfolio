@@ -1,35 +1,30 @@
 const FILES = [
-    { name: 'home.md', type: 'file' },
-    { name: 'education.md', type: 'file' },
+    { name: 'about-me.md', type: 'file' },
     { name: 'experience.md', type: 'file' },
+    { name: 'leadership.md', type: 'file' },
     { name: 'projects.md', type: 'file' },
+    { name: 'links.md', type: 'file' },
 ];
 
 const EDUCATION = [
     {
         school: 'University of British Columbia',
         degree: 'Bachelors in Computer Science and Business, B.Comm',
-        date: 'Expected May 2027',
+        date: 'Expected May 2028',
         location: 'Vancouver, BC',
-        gpa: '4.33/4.33 (92%)',
+        gpa: '4.33',
         awards: [
-            'Ranked 2/737',
-            'Top Junior Student Award (2/2000)',
-            'Trek Excellence Scholarship (Top 5%)',
-            "Dean's List (3 terms)",
-            'John Young Memorial Scholarship (Top 4 ECON 101/102 students)',
-            'Sauder School of Business Scholarship',
+            "Stuart Clark Gilmour Memorial Scholarship in Commerce ('26)",
+            "Trek Excellence Scholarship ('24, '25, '26)",
+            "Dean's List ('24, '25, '26)",
+            "Sauder School of Business Scholarship ('25)",
+            "CUS Junior Award ('25)",
+            "John Young Memorial Prize in Economics ('24)",
         ],
         coursework: [
-            'CPSC 320 - Intermediate Algorithm Design and Analysis (96%)',
-            'CPSC 317 - Computer Networking (100%)',
-            'CPSC 313 - Operating Systems (98%)',
-            'CPSC 304 - Relational Databases (97%)',
-            'CPSC 210 - Software Construction (99%)',
-            'CPSC 221 - Basic Algorithms and Data Structures (94%)',
-            'CPSC 213 - Computer Systems (91%)',
-            'CPSC 121 - Models of Computation (98%)',
-            'CPSC 110 - Computation & Programming (99%)',
+            'Operating Systems (98%)',
+            'Computer Networking (100%)',
+            'Algorithmic Design and Analysis (96%)',
         ],
     },
 ];
@@ -39,76 +34,74 @@ const EXPERIENCE = [
         role: 'Software Engineering Intern',
         org: 'Tesla – FleetNet',
         link: 'https://www.tesla.com/',
-        date: 'May 2026 · Palo Alto, CA',
-        desc: 'Built platform infrastructure for Robotaxi and connected-vehicle systems, spanning authentication, vehicle commands, voice assistant integration tooling, and fleet connectivity.',
+        date: 'May 2026 – Aug 2026 · Palo Alto, CA',
+        desc: [
+            'Engineered production-faithful testing for 1B+ in-car assistant interactions by streaming Opus-in-Ogg over QUIC and encapsulating multi-turn vehicle/tool state machines to exercise production server paths.',
+            'Designed an idempotent FSD trial-notification pipeline for 1.5M+ European vehicles, using an in-memory cache and telemetry snapshot backfills to reconcile missed eligibility transitions and support global rollout.',
+            'Expanded WebRTC dashcam streaming to new fleet types and scaled TURN/ICE infrastructure to support 10,000+ concurrent sessions and 10+ TB/day of real-time video traffic.',
+        ],
+    },
+    {
+        role: 'Software Engineering Intern',
+        org: 'DataVisor',
+        link: 'https://www.datavisor.com/',
+        date: 'Jan 2025 – Apr 2025 · Mountain View, CA',
+        desc: [
+            'Built a MySQL-backed coordination layer using serializable transactions to apply logical ClickHouse configuration changes exactly once across A/B clusters, ensuring consistent cross-region rollouts.',
+            'Secured dashboard embedding for 5+ enterprise clients (1M+ users) by engineering a server-side JWT authentication system with Metabase and ZooKeeper integration.',
+        ],
+    },
+];
+
+const LEADERSHIP = [
+    {
+        role: 'Teaching Assistant – Computer Hardware and Operating Systems (CPSC 313)',
+        org: 'University of British Columbia',
+        link: 'https://www.ubc.ca/',
+        date: 'Sep 2026 · Vancouver, BC',
+        desc: [
+            'Taught 300+ students computer systems and operating systems concepts through labs and office hours, covering pipelining, caches, threads, and processes.',
+        ],
     },
     {
         role: 'Lead Software Engineer',
         org: 'UBC BizTech',
         link: 'https://www.ubcbiztech.com/',
-        date: 'May 2024 – Present',
-        desc: 'Enabled 4,070+ connections for 270 attendees at flagship conference with NFC cards and an internal networking platform using serverless architecture and DynamoDB. Engaged 200+ concurrent audience and judges with real-time reactions and scoring (< 100 ms response time) using a WebSocket microservice and AWS API Gateway. Automated feedback distribution for 150+ hackathon attendees and judges using z-score normalization and a NFC workflow.',
+        date: 'May 2025 – Apr 2026 · Vancouver, BC',
+        desc: [
+            'Enabled 10k+ networking interactions via custom NFC hardware integration, contributing to Club of the Year and Conference of the Year awards and driving a 30% YoY increase in attendee retention.',
+            'Led and mentored 10 engineers in delivering full-stack projects, conducting code reviews and guiding technical design, development, and deployment.',
+        ],
     },
     {
-        role: 'Software Engineer Intern — Backend Decision Team',
-        org: 'DataVisor',
-        link: 'https://www.datavisor.com/',
-        date: 'Jan 2025 – Apr 2025',
-        desc: 'Led a business intelligence enhancement project used by 5+ clients with 1M+ users, securing dashboard embeddings by parsing tree-structured Metabase data and custom client configurations. Resolved recurring P1 issue requiring 100+ hours across 10+ infra team members by synchronizing ClickHouse table configs with post-deployment jobs across 12 environments. Eliminated 100% of manual time spent by 300+ fraud investigators templating fraud case notes by building a templating service with Liquibase-based rollback support.',
-    },
-    {
-        role: 'Undergraduate Teaching Assistant — Software Construction | OOP',
+        role: 'Teaching Assistant – Object-Oriented Programming (CPSC 210)',
         org: 'University of British Columbia',
         link: 'https://www.cs.ubc.ca/course-section/cpsc-210-101-2023w',
-        date: 'Sept 2024 – Present',
-        desc: 'Mentored over 50 students through personal office hours, guiding them through library documentation and providing design pattern advice for personal projects. Explained object-oriented programming and design concepts to over 500 students on the class discussion board, encouraging in-depth exploration of topics such as robustness and iterator implementation.',
-    },
-    {
-        role: 'Frontend Development Intern',
-        org: 'NAOS Blockchain Capital',
-        link: 'https://www.naos.xyz/',
-        date: 'Jan 2024 – Jul 2024',
-        desc: "Increased social media impressions by 180% by integrating TikTok's oEmbed API into the company's static site, revamping the media carousel to include posts from multiple social platforms. Reduced manual customer information aggregation time by 90% by developing internal tools using Puppeteer to web scrape, parse, and export over 2 GB of data to Excel for cross-functional use.",
+        date: 'Sep 2024 – Dec 2024 · Vancouver, BC',
+        desc: [
+            'Facilitated learning for 500+ students in Object-Oriented Design and Java; conducted code reviews and labs to reinforce abstraction, polymorphism, and design patterns.',
+        ],
     },
 ];
 
 const PROJECTS = [
     {
-        name: 'PSync — P2P File System Mirroring',
-        date: 'December 2025',
-        desc: 'A peer-to-peer application layer protocol for mirroring file systems across devices. Built a signalling server for WebRTC peer discovery with public key authentication, a daemon that watches for filesystem changes and broadcasts them to peers with vector clock-based conflict resolution, and a Merkle tree structure for efficient synchronization. Designed for near real-time sync of Obsidian vaults without cloud storage.',
+        name: 'PSync – Decentralized File Synchronization System',
+        date: 'Dec 2025',
+        desc: [
+            'Developed P2P file sync daemon in Go with WebRTC and vector clock-based gossip protocol, achieving ≤ 50ms sync and 40x faster performance than cloud-based alternatives with zero server-side storage.',
+            'Implemented SHA-256 Merkle tree reconciliation in Go for efficient comparison and deterministic conflict resolution, enabling efficient sync across 10K+ files with causal consistency guarantees.',
+        ],
         link: 'https://github.com/kevinxiao27/psync',
     },
     {
-        name: 'Nerve — Real-Time Emergency Dispatch Dashboard',
-        date: 'March 2025',
-        desc: 'ProductX Hackathon (2nd Place & CDL/Venture Founder Prize). Won $500 prize out of 60+ teams, plus CDL & Venture Founder awards. Built a real-time dashboard to stream body-cam video/audio from field units with AI-powered event summarization and sentiment detection using TensorFlow. Led architecture and data ingestion using Socket.io, Express.js, Supabase, and AssemblyAI — batching videos for ingestion and streaming updates over WebSockets.',
+        name: 'Nerve – Real-Time Emergency Dispatch Dashboard',
+        date: 'Mar 2025',
+        desc: [
+            'Placed 2nd, winning $2000 prize out of 60+ teams, including the CDL & Venture Founder prize.',
+            'Built a React dashboard for emergency responders with live video streaming and TensorFlow sentiment analysis.',
+        ],
         link: 'https://devpost.com/software/nerve-1vlr0m',
-    },
-    {
-        name: 'UXOpen Live Voting Platform',
-        date: 'May 2024',
-        desc: 'Architected and led development of core WebSocket microservice for an end-to-end live voting platform, supporting 100+ concurrent users; documented system design and database schemas for seamless handoff. Reduced DynamoDB read costs by 40% by transitioning from relational scans to a single-table query schema with Global Secondary Indexes.',
-        link: 'https://github.com/ubc-biztech/serverless-biztechapp',
-    },
-    {
-        name: 'GeoPlots',
-        date: 'July 2024',
-        desc: "Developed a geo-data focused journaling web app with rapid data visualization, utilizing Leaflet and Next.js for optimized data fetching. Enhanced identity and authorization with Firebase SDK for route-guarding and secured API calls. Decreased location input time by 70% using MapTiler's reverse geocoding API, mapping coordinates to addresses quickly.",
-        link: 'https://github.com/kevinxiao27/geoplot',
-        prod: 'https://geoplot-journal.vercel.app/',
-    },
-    {
-        name: 'SwiftGift — ProduHacks',
-        date: 'March 2024',
-        desc: "Delivered personalized gift recommendations by structuring OpenAI's GPT-3.5 output based on user preferences. Refined code coupling by 40% through implementing a custom middleware to sanitize and validate user inputs. Diminished database read and write times by 30% by integrating MongoDB indexing to avoid large table scans and inefficient queries.",
-        link: 'https://github.com/kevinxiao27/swiftgift',
-    },
-    {
-        name: 'CacheYouLater — nwHacks 2024',
-        date: 'January 2024',
-        desc: 'nwHacks submission for community and connection based on real life and virtual geocaching integration. Utilizing a noSQL database through a RESTFUL API with user authentication and JWT Token, I seamlessly integrated the backend and frontend using Next.js.',
-        link: 'https://github.com/kevinxiao27/movie-ticket-booking',
     },
 ];
 
@@ -242,22 +235,27 @@ function wrapText(text, width) {
     return lines;
 }
 
+function appendDescriptionLines(lines, descriptions) {
+    descriptions.forEach(description => {
+        const wrapped = wrapText(description, 74);
+        wrapped.forEach((line, i) => {
+            lines.push({ html: `${i === 0 ? '<span class="prompt">▸</span> ' : '  '}${escapeHtml(line)}` });
+        });
+    });
+}
+
 // ── Content Lines ────────────────────────────────────
 
-function buildHomeLines() {
-    return [
+function buildAboutMeLines() {
+    const lines = [
         { html: '<span class="heading">Kevin Xiao</span>' },
-        { html: '<span class="subheading">CS + Business @ UBC · Engineering @ Tesla</span>' },
-        { html: '' },
-        { html: '<span class="divider-line">────────────────────────────────────────</span>' },
-        { html: '' },
-        { html: '<span class="prompt">&gt;</span> <a class="link" href="https://github.com/kevinxiao27" target="_blank" rel="noopener">github.com/kevinxiao27</a>' },
-        { html: '<span class="prompt">&gt;</span> <a class="link" href="https://www.linkedin.com/in/kevxiao/" target="_blank" rel="noopener">linkedin.com/in/kevxiao</a>' },
-        { html: '<span class="prompt">&gt;</span> <a class="link" href="mailto:kevin.xiao27@gmail.com" target="_blank" rel="noopener">kevin.xiao27@gmail.com</a>' },
+        { html: '<span class="subheading">CS + Business @ UBC · Prev @ Tesla</span>' },
+        { html: '<span class="subheading">I solve problems at the intersection of complex systems and effective interfaces.</span>' },
         { html: '' },
         { html: '<span class="divider-line">────────────────────────────────────────</span>' },
         { html: '' },
     ];
+    return lines.concat(buildEducationLines());
 }
 
 function buildExperienceLines() {
@@ -271,7 +269,23 @@ function buildExperienceLines() {
         lines.push({ html: `<span class="heading">${escapeHtml(exp.role)}</span>` });
         lines.push({ html: `<span class="subheading"><a class="link" href="${exp.link}" target="_blank" rel="noopener">${escapeHtml(exp.org)}</a> · ${escapeHtml(exp.date)}</span>` });
         lines.push({ html: '' });
-        wrapText(exp.desc, 76).forEach(l => lines.push({ html: escapeHtml(l) }));
+        appendDescriptionLines(lines, exp.desc);
+    });
+    return lines;
+}
+
+function buildLeadershipLines() {
+    const lines = [];
+    LEADERSHIP.forEach((entry, i) => {
+        if (i > 0) {
+            lines.push({ html: '' });
+            lines.push({ html: '<span class="divider-line">────────────────────────────────────────</span>' });
+            lines.push({ html: '' });
+        }
+        lines.push({ html: `<span class="heading">${escapeHtml(entry.role)}</span>` });
+        lines.push({ html: `<span class="subheading"><a class="link" href="${entry.link}" target="_blank" rel="noopener">${escapeHtml(entry.org)}</a> · ${escapeHtml(entry.date)}</span>` });
+        lines.push({ html: '' });
+        appendDescriptionLines(lines, entry.desc);
     });
     return lines;
 }
@@ -288,9 +302,9 @@ function buildEducationLines() {
         lines.push({ html: `<span class="subheading">${escapeHtml(edu.school)} · ${escapeHtml(edu.date)}</span>` });
         lines.push({ html: `<span class="subheading">${escapeHtml(edu.location)} · GPA: ${escapeHtml(edu.gpa)}</span>` });
         lines.push({ html: '' });
-        lines.push({ html: '<span class="prompt">Awards</span>' });
+        lines.push({ html: '<span class="prompt">Awards and Scholarships:</span>' });
         edu.awards.forEach(award => {
-            lines.push({ html: `<span class="prompt">▸</span> ${escapeHtml(award)}` });
+            lines.push({ html: `<span class="prompt">-</span> ${escapeHtml(award)}` });
         });
         lines.push({ html: '' });
         lines.push({ html: '<span class="prompt">Relevant Coursework</span>' });
@@ -312,7 +326,7 @@ function buildProjectLines() {
         lines.push({ html: `<span class="heading">${escapeHtml(proj.name)}</span>` });
         lines.push({ html: `<span class="subheading">${escapeHtml(proj.date)}</span>` });
         lines.push({ html: '' });
-        wrapText(proj.desc, 76).forEach(l => lines.push({ html: escapeHtml(l) }));
+        appendDescriptionLines(lines, proj.desc);
         lines.push({ html: '' });
         lines.push({ html: `<span class="prompt">&gt;</span> <a class="link" href="${proj.link}" target="_blank" rel="noopener">${extractDomain(proj.link)}</a>` });
         if (proj.prod) {
@@ -320,6 +334,14 @@ function buildProjectLines() {
         }
     });
     return lines;
+}
+
+function buildLinkLines() {
+    return [
+        { html: '<span class="prompt">&gt;</span> <a class="link" href="https://github.com/kevinxiao27" target="_blank" rel="noopener">github.com/kevinxiao27</a>' },
+        { html: '<span class="prompt">&gt;</span> <a class="link" href="https://www.linkedin.com/in/kevxiao/" target="_blank" rel="noopener">linkedin.com/in/kevxiao</a>' },
+        { html: '<span class="prompt">&gt;</span> <a class="link" href="mailto:kevin.xiao27@gmail.com">kevin.xiao27@gmail.com</a>' },
+    ];
 }
 
 // ── Render ───────────────────────────────────────────
@@ -336,13 +358,13 @@ function render() {
 }
 
 function updateStatusBar() {
-    $modeIndicator.textContent = state.mode === Mode.KILLED ? 'KILLED' : 'NORMAL';
+    $modeIndicator.textContent = state.mode === Mode.KILLED ? '' : 'NORMAL';
     $modeIndicator.className = '';
 
     let path = '~/portfolio';
     if (state.mode === Mode.FILE_CONTENT) path = `~/portfolio/${state.openFile}`;
     else if (state.mode === Mode.HELP) path = '~/help';
-    else if (state.mode === Mode.KILLED) path = '~/dead';
+    else if (state.mode === Mode.KILLED) path = '~/';
     $currentPath.textContent = path;
 
     if (state.mode === Mode.FILE_TREE) {
@@ -361,12 +383,7 @@ function renderSplash() {
     <div class="splash">
       <div class="name">Kevin Xiao</div>
       <div class="bio">CS + Business @ UBC</div>
-      <div class="bio">Engineering @ Tesla</div>
-      <div class="links">
-        <a href="https://github.com/kevinxiao27" target="_blank" rel="noopener">github.com/kevinxiao27</a>
-        <a href="https://www.linkedin.com/in/kevxiao/" target="_blank" rel="noopener">linkedin.com/in/kevxiao</a>
-        <a href="mailto:kevin.xiao27@gmail.com" target="_blank" rel="noopener">kevin.xiao27@gmail.com</a>
-      </div>
+      <div class="bio">Prev @ Tesla</div>
       <div class="hint" id="splash-hint">press <kbd>-</kbd> to explore. type <kbd>:help</kbd> for commands.</div>
     </div>
   `;
@@ -412,10 +429,11 @@ function renderFileTree() {
 function renderFileContent() {
     let lines;
     switch (state.openFile) {
-        case 'home.md': lines = buildHomeLines(); break;
+        case 'about-me.md': lines = buildAboutMeLines(); break;
         case 'experience.md': lines = buildExperienceLines(); break;
-        case 'education.md': lines = buildEducationLines(); break;
+        case 'leadership.md': lines = buildLeadershipLines(); break;
         case 'projects.md': lines = buildProjectLines(); break;
+        case 'links.md': lines = buildLinkLines(); break;
         default:
             $content.innerHTML = '<div class="no-results">file not found</div>';
             return;
@@ -480,10 +498,11 @@ function renderHelp() {
         { html: '' },
         { html: '<span class="heading">Files</span>' },
         { html: '' },
-        { html: '  <span class="prompt">home.md</span>        about me' },
-        { html: '  <span class="prompt">education.md</span>    education & awards' },
+        { html: '  <span class="prompt">about-me.md</span>    about me & education' },
         { html: '  <span class="prompt">experience.md</span>   work history' },
+        { html: '  <span class="prompt">leadership.md</span>   teaching & leadership' },
         { html: '  <span class="prompt">projects.md</span>     selected projects' },
+        { html: '  <span class="prompt">links.md</span>        contact & profiles' },
         { html: '' },
         { html: '<span class="divider-line">────────────────────────────────────────</span>' },
         { html: '' },
@@ -506,15 +525,8 @@ function renderHelp() {
 function renderKillScreen() {
     $content.innerHTML = `
     <div class="kill-screen">
-      <div class="kill-command">$ kill -9 portfolio</div>
-      <div class="kill-msg">&cross; Process terminated.</div>
-      <div class="kill-sub">But I'm still here. Contact me:</div>
-      <div class="kill-links">
-        <a href="mailto:kevin.xiao27@gmail.com" target="_blank" rel="noopener">kevin.xiao27@gmail.com</a>
-        <a href="https://github.com/kevinxiao27" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://www.linkedin.com/in/kevxiao/" target="_blank" rel="noopener">LinkedIn</a>
-        <span class="kill-reopen" id="kill-reopen">Reopen terminal</span>
-      </div>
+      <div class="kill-msg">Process terminated</div>
+      <span class="kill-reopen" id="kill-reopen">Reopen vim-folio</span>
     </div>
   `;
 }

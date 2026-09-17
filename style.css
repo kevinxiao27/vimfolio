@@ -325,7 +325,7 @@ html, body {
 }
 
 .content-line .prompt {
-  color: var(--green);
+  color: var(--orange);
 }
 
 .content-line .link {
@@ -390,7 +390,7 @@ html, body {
 }
 
 .file-content .prompt {
-  color: var(--green);
+  color: var(--orange);
   margin-right: 4px;
 }
 
@@ -613,43 +613,11 @@ html, body {
   user-select: none;
 }
 
-.kill-command {
-  color: var(--fg-dim);
-  font-size: 14px;
-  margin-bottom: 20px;
-}
-
 .kill-msg {
   color: var(--red);
   font-size: 20px;
   font-weight: 600;
   margin-bottom: 16px;
-}
-
-.kill-sub {
-  color: var(--fg-dim);
-  font-size: 14px;
-  margin-bottom: 32px;
-}
-
-.kill-links {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  align-items: center;
-}
-
-.kill-links a {
-  color: var(--cyan);
-  text-decoration: none;
-  font-size: 13px;
-  border-bottom: 1px solid transparent;
-  transition: border-color 0.2s, color 0.2s;
-}
-
-.kill-links a:hover {
-  color: var(--teal);
-  border-bottom-color: var(--teal);
 }
 
 .kill-reopen {
