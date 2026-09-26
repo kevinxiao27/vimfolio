@@ -31,11 +31,22 @@ const EDUCATION = [
 
 const EXPERIENCE = [
     {
+        role: 'Research Intern',
+        org: 'Systopia Lab',
+        link: 'https://systopia.cs.ubc.ca/',
+        date: 'Sep 2026 – Present · Hybrid',
+        desc: [
+            'Extending Bubbles, a systematic concurrency-testing framework for Go distributed systems, to control and replay goroutine schedules and inter-node RPC delivery.',
+            'Evaluating Bubbles against real-world Go systems to measure concurrency bug discovery, deterministic reproduction, integration friction, schedule-search effectiveness, and runtime overhead.',
+        ],
+    },
+    {
         role: 'Software Engineering Intern',
         org: 'Tesla – FleetNet',
         link: 'https://www.tesla.com/',
         date: 'May 2026 – Aug 2026 · Palo Alto, CA',
         desc: [
+            'Recovered $30K/month in Robotaxi revenue by eliminating a distributed billing race, deriving final payment details instead of relying on trip data produced by competing writers.',
             'Engineered production-faithful testing for 1B+ in-car assistant interactions by streaming Opus-in-Ogg over QUIC and encapsulating multi-turn vehicle/tool state machines to exercise production server paths.',
             'Designed an idempotent FSD trial-notification pipeline for 1.5M+ European vehicles, using an in-memory cache and telemetry snapshot backfills to reconcile missed eligibility transitions and support global rollout.',
             'Expanded WebRTC dashcam streaming to new fleet types and scaled TURN/ICE infrastructure to support 10,000+ concurrent sessions and 10+ TB/day of real-time video traffic.',
@@ -483,6 +494,7 @@ function renderHelp() {
         { html: '  <span class="prompt">h</span> / <span class="prompt">Esc</span>     go back' },
         { html: '  <span class="prompt">gg</span>          go to first line' },
         { html: '  <span class="prompt">G</span>           go to last line' },
+        { html: '  <span class="prompt">[n]G</span>        go to file / line n' },
         { html: '' },
         { html: '<span class="heading">Commands</span>' },
         { html: '' },
