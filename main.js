@@ -128,6 +128,7 @@ const state = {
     openFile: null,
     countStr: '',
     pendingG: false,
+    relativeNumbers: false,
 };
 
 // ── DOM ──────────────────────────────────────────────
@@ -408,7 +409,7 @@ function renderFileTree() {
     files.forEach((file, i) => {
         const isCursor = i === state.cursor;
         const dist = Math.abs(i - state.cursor);
-        const lineNum = isCursor ? (i + 1) : dist;
+        const lineNum = state.relativeNumbers && !isCursor ? dist : i + 1;
         const [base, ...rest] = file.name.split('.');
         const ext = rest.length ? '.' + rest.join('.') : '';
         html += `
@@ -458,7 +459,7 @@ function renderFileContent() {
     lines.forEach((line, i) => {
         const isCursor = i === state.contentCursor;
         const dist = Math.abs(i - state.contentCursor);
-        const lineNum = isCursor ? (i + 1) : dist;
+        const lineNum = state.relativeNumbers && !isCursor ? dist : i + 1;
         html += `
       <div class="content-line${isCursor ? ' cursor' : ''}">
         <span class="line-number">${lineNum}</span>
@@ -501,6 +502,7 @@ function renderHelp() {
         { html: '  <span class="prompt">:help</span>       show this help' },
         { html: '  <span class="prompt">:kill</span>       terminate portfolio' },
         { html: '  <span class="prompt">:q</span>          close overlay' },
+        { html: '  <span class="prompt">:rnu</span>        toggle relative line numbers' },
         { html: '  <span class="prompt">:fullscreen</span> toggle fullscreen' },
         { html: '' },
         { html: '<span class="heading">Title Bar</span>' },
@@ -573,6 +575,10 @@ function executeCommand(cmd) {
         triggerKill();
     } else if (trimmed === 'fullscreen') {
         toggleFullscreen();
+    } else if (trimmed === 'rnu') {
+        state.relativeNumbers = !state.relativeNumbers;
+        render();
+        showNotification(state.relativeNumbers ? 'relative line numbers' : 'absolute line numbers');
     }
 }
 
