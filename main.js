@@ -504,23 +504,6 @@ function renderHelp() {
         { html: '  <span class="prompt">:q</span>          close overlay' },
         { html: '  <span class="prompt">:rnu</span>        toggle relative line numbers' },
         { html: '  <span class="prompt">:fullscreen</span> toggle fullscreen' },
-        { html: '' },
-        { html: '<span class="heading">Title Bar</span>' },
-        { html: '' },
-        { html: '  <span class="help-dot-red">&#9679;</span> red       terminate portfolio' },
-        { html: '  <span class="prompt">&#9679;</span> green     toggle fullscreen' },
-        { html: '' },
-        { html: '<span class="heading">Files</span>' },
-        { html: '' },
-        { html: '  <span class="prompt">about-me.md</span>    about me & education' },
-        { html: '  <span class="prompt">experience.md</span>   work history' },
-        { html: '  <span class="prompt">leadership.md</span>   teaching & leadership' },
-        { html: '  <span class="prompt">projects.md</span>     selected projects' },
-        { html: '  <span class="prompt">links.md</span>        contact & profiles' },
-        { html: '' },
-        { html: '<span class="divider-line">────────────────────────────────────────</span>' },
-        { html: '' },
-        { html: '<span class="subheading">press any key to close</span>' },
     ];
 
     let html = '<div class="content-lines help-screen">';
